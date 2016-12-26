@@ -19,18 +19,18 @@
         </template>
       </div>
       <template v-for="country of sites">
-      <div v-if="countryChecked.indexOf(country.id) !== -1" class="sites">
-        <span class="tag tag-pill tag-success cname">{{ country.name }}</span>
-        <div>
-        <template v-for="site of country.sites">
-          <label class="custom-control custom-checkbox">
+        <div v-if="countryChecked.indexOf(country.id) !== -1" class="sites">
+          <span class="tag tag-pill tag-success cname">{{ country.name }}</span>
+          <div>
+            <template v-for="site of country.sites">
+              <label class="custom-control custom-checkbox">
               <input type="checkbox" v-model="siteChecked" :value="site.id" class="custom-control-input">
               <span class="custom-control-indicator"></span>
               <span class="custom-control-description">{{ site.name }}</span>
           </label>
-        </template>
+            </template>
+          </div>
         </div>
-      </div>
       </template>
     </div>
     <table id="data" class="unselectable table table-hover table-bordered">
@@ -56,14 +56,13 @@
       </tbody>
     </table>
     <div class="row">
-      <div class="col-lg-3">
+      <div class="col-lg-6">
         <div class="input-group">
           <span class="input-group-btn">
             <button @click="download" class="btn btn-info">Download</button>
           </span>
         </div>
       </div>
-      <div class="col-lg-3"></div>
       <div class="col-lg-6">
         <div class="form-group" :class="{'has-warning': hasWarning, 'has-danger': hasDanger, 'has-success':validated}">
           <div class="input-group">
@@ -81,7 +80,6 @@
     </div>
   </div>
 </template>
-
 <script>
 export default {
 	name: 'app',
@@ -122,14 +120,14 @@ export default {
 				method: 'put',
 				body: JSON.stringify({
 					sites: this.siteChecked,
-					domains: this.input.split(',').map((e) => {
+					domains: this.input.split(',').map(e => {
 						return e.replace(/(^\s*)|(\s*$)/g, '')
 					})
 				}),
 				headers: {
 					'Content-Type': 'application/json'
 				}
-			}).then((res) => {
+			}).then(res => {
 				if (res.status === 200) {
 					location.reload();
 				} else {
@@ -140,11 +138,10 @@ export default {
 		changePass: function(e) {
 			// @TODO: Change Password
 		}
-
 	},
 	computed: {
 		filteredDomain: function() {
-			return this.domains.filter((e) => {
+			return this.domains.filter(e => {
 				if (this.siteChecked.indexOf(e.sid) > -1) return e;
 			});
 		},
@@ -167,10 +164,24 @@ export default {
 	created: function() {
 		!self.fetch && console.error('fetch API is not supported, please upgrade the browser.');
 		
-    this.domains = [{"sid":3,"site":"krsmb_unit","domain":"123","cTime":"2016-11-21T10:03:57.000Z","vTime":"2016-11-21T10:03:57.000Z","applicant":"user"},{"sid":6,"site":"kraffinity_unit","domain":"123","cTime":"2016-11-21T10:03:57.000Z","vTime":"2016-11-21T10:03:57.000Z","applicant":"user"},{"sid":4,"site":"krepp_unit","domain":"123","cTime":"2016-11-21T10:03:57.000Z","vTime":"2016-11-21T10:03:57.000Z","applicant":"user"}];
+    fetch('api/admin/site', {
+                credentials: 'include'
+    }).then(res => {
+        return res.json().then(json => {
+            this.sites = json;
+            for(let entry of json){
+              this.countryChecked.push(entry.id)
+            }
+        });
+    });
 
-    this.sites = [{"id":2,"name":"HK","sites":[{"id":7,"name":"hkcepp_lenovo_unit"},{"id":8,"name":"hkeducation_unit"},{"id":9,"name":"hksmb_lenovo_unit"},{"id":10,"name":"hkepp_lenovo_unit"},{"id":11,"name":"hkcepp_mc_lenovo_unit"}]},{"id":1,"name":"KR","sites":[{"id":1,"name":"krcepp_lenovo_unit"},{"id":2,"name":"kreducation_unit"},{"id":3,"name":"krsmb_unit"},{"id":4,"name":"krepp_unit"},{"id":5,"name":"krpartner_unit"},{"id":6,"name":"kraffinity_unit"}]},{"id":3,"name":"SG","sites":[{"id":12,"name":"sgcepp_lenovo_unit"},{"id":13,"name":"sgcepp01_unit"},{"id":14,"name":"sgnonprofit_unit"},{"id":15,"name":"sgepp_lenovo_unit"},{"id":16,"name":"sgpartner_unit"},{"id":17,"name":"sgstcepp_lenovo_unit"}]},{"id":4,"name":"TW","sites":[{"id":18,"name":"twepp_unit"},{"id":19,"name":"twedu_unit"}]}];
- 
+    fetch('api/admin/domain', {
+        credentials: 'include'
+    }).then(res => {
+        return res.json().then(json => {
+            this.domains = json
+        });
+    });
 	}
 }
 </script>
@@ -190,17 +201,23 @@ export default {
   .unselectable {
     user-select: none;
   }
-  .custom-control+.custom-control{
-    margin-left:0 !important
+  
+  .custom-control+.custom-control {
+    margin-left: 0 !important
   }
-  .sites{
+  
+  .sites {
     border-top: 1px dashed #777;
     padding: 1em 0 1em 0
   }
-  .cname{
+  
+  .cname {
     float: right;
     position: relative;
     top: -2em;
   }
-
+  
+  .col-lg-6 {
+    margin-bottom: 1em;
+  }
 </style>

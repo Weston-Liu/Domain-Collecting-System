@@ -131,7 +131,7 @@ export default {
         computed: {
             filteredDomain: function () {
                 return this.domains.filter((e, i, a) => {
-                    if (this.checked.indexOf(e.sid + '') > -1)
+                    if (this.checked.indexOf(e.sid) > -1)
                         return e;
                 });
             },
@@ -162,6 +162,10 @@ export default {
                     this.name = json.name;
                     this.country = json.country;
                     this.sites = json.sites;
+
+                    for(let entry of this.sites){
+                        this.checked.push(entry.id);
+                    }
                 });
             });
 
@@ -173,9 +177,6 @@ export default {
                         entry.status = entry.cTime == entry.vTime;
                     }
                     this.domains = json;
-                    document.querySelectorAll('input[type="checkbox"]').forEach((e) => {
-                        this.checked.push(e.getAttribute('value'))
-                    })
                 });
             });
         }
@@ -200,5 +201,8 @@ export default {
     
     .custom-control+.custom-control {
         margin-left: 0 !important
+    }
+    .col-lg-6{
+        margin-bottom: 1em;
     }
 </style>
