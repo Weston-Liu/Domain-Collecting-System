@@ -20,14 +20,14 @@
       </div>
       <template v-for="country of sites">
         <div v-if="countryChecked.indexOf(country.id) !== -1" class="sites">
-          <span class="tag tag-pill tag-success cname">{{ country.name }}</span>
+         <span class="tag tag-pill tag-success cname">{{ country.name }}</span>
           <div>
             <template v-for="site of country.sites">
               <label class="custom-control custom-checkbox">
-              <input type="checkbox" v-model="siteChecked" :value="site.id" class="custom-control-input">
-              <span class="custom-control-indicator"></span>
-              <span class="custom-control-description">{{ site.name }}</span>
-          </label>
+                <input type="checkbox" v-model="siteChecked" :value="site.id" class="custom-control-input">
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">{{ site.name }}</span>
+              </label>
             </template>
           </div>
         </div>
@@ -55,29 +55,30 @@
         </template>
       </tbody>
     </table>
-    <div class="row">
-      <div class="col-lg-6">
-        <div class="input-group">
-          <span class="input-group-btn">
-            <button @click="download" class="btn btn-info">Download</button>
-          </span>
-        </div>
-      </div>
-      <div class="col-lg-6">
-        <div class="form-group" :class="{'has-warning': hasWarning, 'has-danger': hasDanger, 'has-success':validated}">
-          <div class="input-group">
-            <input type="text" class="form-control" :class="{'form-control-warning': hasWarning, 'form-control-danger': hasDanger, 'form-control-success':validated}"
-              v-model="input" placeholder="Input domain...">
-            <span class="input-group-btn">
-              <button @click="add" :disabled="hasDanger" id="add" class="btn btn-secondary" :class="{'btn-danger':hasDanger,'btn-warning':hasWarning, 'btn-success':validated}" type="button">Add</button>
-            </span>
-          </div>
-          <small class="form-text text-muted">You can use comma to seperate mutiple domains.</small>
-          <div class="form-control-feedback">{{ warnInfo }}</div>
-          <div class="form-control-feedback">{{ errorInfo }}</div>
-        </div>
-      </div>
+
+
+<el-row type="flex" class="row-bg" justify="space-between">
+  <el-col :span="12">
+    <div class="input-group">
+      <span class="input-group-btn">
+        <button @click="download" class="btn btn-info">Download</button>
+      </span>
     </div>
+  </el-col>
+  <el-col :span="8"> 
+    <el-date-picker
+      v-model="dateRange"
+      type="daterange"
+      align="right"
+      placeholder="Choose Date Range"
+      :picker-options="pickerOptions"
+      >
+    </el-date-picker>
+  </el-col>
+</el-row>
+
+
+    
   </div>
 </template>
 <script>
@@ -89,7 +90,36 @@ export default {
 			countryChecked: [],
       siteChecked: [],
       sites:[],
-      input: ''
+      input: '',
+      dateRange: '',
+
+      pickerOptions: {
+          shortcuts: [{
+            text: 'Last Week',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: 'Last Month',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: 'Last 3 Months',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit('pick', [start, end]);
+            }
+          }]
+        }
 		}
 	},
 	methods: {
@@ -106,7 +136,7 @@ export default {
 			}).then(function(blob) {
 				var link = document.createElement('a');
 				link.href = URL.createObjectURL(blob);
-				link.download = 'Domains.xlsx';
+				link.download = 'Domains.csv';
 				link.click();
 				URL.revokeObjectURL(link.href);
 			});
@@ -144,28 +174,13 @@ export default {
 			return this.domains.filter(e => {
 				if (this.siteChecked.indexOf(e.sid) > -1) return e;
 			});
-		},
-		hasWarning: function() {
-			return this.siteChecked.length > 1;
-		},
-		hasDanger: function() {
-			return this.siteChecked.length === 0 || !/^([\w\-]+@)?[a-zA-Z\d]((\-)?[a-zA-Z\d])*(\.[a-zA-Z\d]((\-)?[a-zA-Z\d])*)*(\.[a-zA-Z]{2,4})(,([\w\-]+@)?[a-zA-Z\d]((\-)?[a-zA-Z\d])*(\.[a-zA-Z\d]((\-)?[a-zA-Z\d])*)*(\.[a-zA-Z]{2,4}))*$/.test(this.input);
-		},
-		warnInfo: function() {
-			return this.siteChecked.length > 1 ? `Attention : You are adding domain to ${this.siteChecked.length} sites.`: '';
-		},
-		errorInfo: function() {
-			return this.hasDanger ? (this.siteChecked.length === 0 ? 'Error: Please choose a targeted site.' : 'Error: Domain format  error.') : '';
-		},
-		validated: function() {
-			return !this.warnInfo && !this.errorInfo;
 		}
 	},
 	created: function() {
 		!self.fetch && console.error('fetch API is not supported, please upgrade the browser.');
 		
     fetch('api/admin/site', {
-                credentials: 'include'
+        credentials: 'include'
     }).then(res => {
         return res.json().then(json => {
             this.sites = json;
@@ -186,7 +201,10 @@ export default {
 }
 </script>
 <style>
-  .container {
+  * {
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+  }
+  .container { 
     padding: 50px
   }
   
@@ -220,4 +238,8 @@ export default {
   .col-lg-6 {
     margin-bottom: 1em;
   }
+
+ .el-date-editor{
+   display:block !important
+ }
 </style>
