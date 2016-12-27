@@ -20,7 +20,7 @@
       </div>
       <template v-for="country of sites">
         <div v-if="countryChecked.indexOf(country.id) !== -1" class="sites">
-         <span class="tag tag-pill tag-success cname">{{ country.name }}</span>
+          <span class="tag tag-pill tag-success cname">{{ country.name }}</span>
           <div>
             <template v-for="site of country.sites">
               <label class="custom-control custom-checkbox">
@@ -55,30 +55,19 @@
         </template>
       </tbody>
     </table>
-
-
-<el-row type="flex" class="row-bg" justify="space-between">
-  <el-col :span="12">
-    <div class="input-group">
-      <span class="input-group-btn">
+    <el-row type="flex" class="row-bg" justify="space-between">
+      <el-col :span="12">
+        <div class="input-group">
+          <span class="input-group-btn">
         <button @click="download" class="btn btn-info">Download</button>
       </span>
-    </div>
-  </el-col>
-  <el-col :span="8"> 
-    <el-date-picker
-      v-model="dateRange"
-      type="daterange"
-      align="right"
-      placeholder="Choose Date Range"
-      :picker-options="pickerOptions"
-      >
-    </el-date-picker>
-  </el-col>
-</el-row>
-
-
-    
+        </div>
+      </el-col>
+      <el-col :span="8">
+        <el-date-picker v-model="dateRange" type="daterange" align="right" placeholder="Choose Date Range" :picker-options="pickerOptions">
+        </el-date-picker>
+      </el-col>
+    </el-row>
   </div>
 </template>
 <script>
@@ -90,8 +79,7 @@ export default {
 			countryChecked: [],
       siteChecked: [],
       sites:[],
-      input: '',
-      dateRange: '',
+      dateRange: [],
 
       pickerOptions: {
           shortcuts: [{
@@ -172,7 +160,8 @@ export default {
 	computed: {
 		filteredDomain: function() {
 			return this.domains.filter(e => {
-				if (this.siteChecked.indexOf(e.sid) > -1) return e;
+        var d = new Date(e.cTime); 
+				if (this.siteChecked.indexOf(e.sid) > -1 && d > this.dateRange[0] && d < this.dateRange[1]) return e;
 			});
 		}
 	},
@@ -202,9 +191,10 @@ export default {
 </script>
 <style>
   * {
-    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
   }
-  .container { 
+  
+  .container {
     padding: 50px
   }
   
@@ -238,8 +228,8 @@ export default {
   .col-lg-6 {
     margin-bottom: 1em;
   }
-
- .el-date-editor{
-   display:block !important
- }
+  
+  .el-date-editor {
+    display: block !important
+  }
 </style>
