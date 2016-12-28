@@ -6,7 +6,8 @@
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development supervisor -w server/routes Server/main.js",
-    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
+    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
+    "prod": "npm run build && cross-env NODE_ENV=production node Server/main.js"
   },
   "main": "server/main.js",
   "dependencies": {

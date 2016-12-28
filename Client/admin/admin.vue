@@ -3,7 +3,7 @@
     <div class="logout">
       <span>Welcome! My lord!</span>
       <span> | </span>
-      <a @click="changePass">password</a>
+      <a class="link" @click="changePassShow">password</a>
       <span> | </span>
       <a href="api/public/logout">Logout</a></div>
     <h1>Domain Collecting System</h1>
@@ -37,11 +37,7 @@
     <template>
       <el-row type="flex" class="row-bg" justify="space-between">
         <el-col :span="12">
-          <div class="input-group">
-            <span class="input-group-btn">
-        <button @click="download" class="btn btn-info">Download</button>
-      </span>
-          </div>
+          <el-button @click="download" type="info">Download</el-button>
         </el-col>
         <el-col :span="8">
           <el-date-picker v-model="dateRange" type="daterange" align="right" placeholder="Choose Date Range" :picker-options="pickerOptions">
@@ -49,13 +45,18 @@
         </el-col>
       </el-row>
     </template>
+    <change-pass :visible="changePassVisible" v-on:cpclosed="changePassClose"></change-pass>
   </div>
 </template>
 <script>
   import table from './table.vue'
+  import dialog from './changePass.vue'
 
   export default {
     name: 'app',
+
+    mixins: [dialog],
+
     data() {
       return {
         domains: [],
@@ -63,6 +64,7 @@
         siteChecked: [],
         sites: [],
         dateRange: [],
+        changePassVisible: false,
 
         pickerOptions: {
           shortcuts: [{
@@ -94,9 +96,9 @@
       }
     },
     methods: {
-      download: function (e) {
+      download: function () {
         var ret = 'Site-ID,domain,unitType\n';
-        
+
         for (let entry of this.filteredDomain) {
           ret += `${entry.site},${entry.domain},b2cUnit\n`;
         }
@@ -112,8 +114,11 @@
         URL.revokeObjectURL(link.href);
 
       },
-      changePass: function (e) {
-        // @TODO: Change Password
+      changePassShow: function () {
+        this.changePassVisible = true;
+      },
+      changePassClose: function () {
+        this.changePassVisible = false;
       }
     },
     computed: {
@@ -125,8 +130,15 @@
       }
     },
     created: function () {
-      !self.fetch && console.error('fetch API is not supported, please upgrade the browser.');
 
+      // compatibility check
+      !self.fetch && this.$notify.error({
+        title: 'Warning',
+        message: 'fetch API is not supported, please upgrade the browser.',
+        duration: 0
+      });
+
+      // fetch site data
       fetch('api/admin/site', {
         credentials: 'include'
       }).then(res => {
@@ -138,6 +150,7 @@
         });
       });
 
+      // fetch domain data
       fetch('api/admin/domain', {
         credentials: 'include'
       }).then(res => {
@@ -152,11 +165,22 @@
       });
     },
     components: {
-      'domain-list': table
+      'domain-list': table,
+      'change-pass': dialog
     }
   }
 </script>
 <style>
+  #app {
+    font-family: 'Avenir', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  .el-row {
+    margin-top: 1em
+  }
+  
   .container {
     padding: 50px
   }
@@ -194,5 +218,9 @@
   
   .el-date-editor {
     display: block !important
+  }
+  
+  .link {
+    cursor: pointer;
   }
 </style>
