@@ -35,6 +35,12 @@
     </div>
     <domain-list :domains="filteredDomain"></domain-list>
     <template>
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[50, 100, 1000]"
+          :page-size="50" layout="total, sizes, prev, pager, next, jumper" :total="400">
+        </el-pagination>
+    </template>
+    <site-management></site-management>
+    <template>
       <el-row type="flex" class="row-bg" justify="space-between">
         <el-col :span="12">
           <el-button @click="download" type="info">Download</el-button>
@@ -51,14 +57,16 @@
 <script>
   import table from './table.vue'
   import dialog from './changePass.vue'
+  import siteManagement from './siteManagement.vue'
 
   export default {
     name: 'app',
 
-    mixins: [dialog],
+    //mixins: [dialog],
 
     data() {
       return {
+        currentPage4: 4,
         domains: [],
         countryChecked: [],
         siteChecked: [],
@@ -96,6 +104,15 @@
       }
     },
     methods: {
+
+      handleSizeChange: function (val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange: function (val) {
+        this.currentPage = val;
+        console.log(`当前页: ${val}`);
+      },
+
       download: function () {
         var ret = 'Site-ID,domain,unitType\n';
 
@@ -144,8 +161,13 @@
       }).then(res => {
         return res.json().then(json => {
           this.sites = json;
+          /* Select All Countries*/
           for (let entry of json) {
-            this.countryChecked.push(entry.id)
+            this.countryChecked.push(entry.id);
+            /* Select All Sites*/
+            for (let site of entry.sites) {
+              this.siteChecked.push(site.id);
+            }
           }
         });
       });
@@ -166,7 +188,8 @@
     },
     components: {
       'domain-list': table,
-      'change-pass': dialog
+      'change-pass': dialog,
+      'site-management': siteManagement
     }
   }
 </script>
