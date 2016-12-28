@@ -1,5 +1,6 @@
 import Vue from 'vue'
-import app from './admin.vue'
+import app from './login.vue'
+
 require ('../assets/bootstrap.min.css')
 
 new Vue({

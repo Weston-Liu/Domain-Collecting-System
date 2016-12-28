@@ -1,0 +1,21 @@
+<template>
+    <div id="app" class="container">
+        <h1>Domain Collecting System Login</h1>
+        <form action="api/public/login" method="post" role="form" id="form">
+            <div class="form-group">
+                <label for="user">Username</label>
+                <input id="user" name="u" type="text" class="form-control" placeholder="Username">
+            </div>
+            <div class="form-group">
+                <label for="pass">Password</label>
+                <input id="pass" name="p" type="password" class="form-control" placeholder="Password">
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>
+</template>
+<style>
+    .container {
+        padding: 50px
+    }
+</style>

@@ -71,17 +71,17 @@
   </div>
 </template>
 <script>
-export default {
-	name: 'app',
-	data() {
-		return {
-			domains: [],
-			countryChecked: [],
-      siteChecked: [],
-      sites:[],
-      dateRange: [],
+  export default {
+    name: 'app',
+    data() {
+      return {
+        domains: [],
+        countryChecked: [],
+        siteChecked: [],
+        sites: [],
+        dateRange: [],
 
-      pickerOptions: {
+        pickerOptions: {
           shortcuts: [{
             text: 'Last Week',
             onClick(picker) {
@@ -108,88 +108,90 @@ export default {
             }
           }]
         }
-		}
-	},
-	methods: {
-		download: function(e) {
+      }
+    },
+    methods: {
+      download: function (e) {
 
-			fetch('api/admin/csv', {
-				method: 'post',
-				body: JSON.stringify(this.filteredDomain),
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			}).then(function(res) {
-				return res.blob();
-			}).then(function(blob) {
-				var link = document.createElement('a');
-				link.href = URL.createObjectURL(blob);
-				link.download = 'Domains.csv';
-				link.click();
-				URL.revokeObjectURL(link.href);
-			});
-		},
-		add: function(e) {
-
-			if (!confirm(`This operation will add the following domain(s) to ${this.siteChecked.length} site(s), continue ?\n\n` + this.input.replace(/\,/g, '\n'))) return;
-
-			fetch('/api/public/domain', {
-				credentials: 'include',
-				method: 'put',
-				body: JSON.stringify({
-					sites: this.siteChecked,
-					domains: this.input.split(',').map(e => {
-						return e.replace(/(^\s*)|(\s*$)/g, '')
-					})
-				}),
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			}).then(res => {
-				if (res.status === 200) {
-					location.reload();
-				} else {
-					alert('At least one of your domain already exists in the database, please check your input.');
-				}
-			});
-		},
-		changePass: function(e) {
-			// @TODO: Change Password
-		}
-	},
-	computed: {
-		filteredDomain: function() {
-			return this.domains.filter(e => {
-        var d = new Date(e.cTime); 
-				if (this.siteChecked.indexOf(e.sid) > -1 && d > this.dateRange[0] && d < this.dateRange[1]) return e;
-			});
-		}
-	},
-	created: function() {
-		!self.fetch && console.error('fetch API is not supported, please upgrade the browser.');
-		
-    fetch('api/admin/site', {
-        credentials: 'include'
-    }).then(res => {
-        return res.json().then(json => {
-            this.sites = json;
-            for(let entry of json){
-              this.countryChecked.push(entry.id)
-            }
+        fetch('api/admin/csv', {
+          method: 'post',
+          body: JSON.stringify(this.filteredDomain),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then(function (res) {
+          return res.blob();
+        }).then(function (blob) {
+          var link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = 'Domains.csv';
+          link.click();
+          URL.revokeObjectURL(link.href);
         });
-    });
+      },
+      add: function (e) {
 
-    fetch('api/admin/domain', {
-        credentials: 'include'
-    }).then(res => {
-        return res.json().then(json => {
-            this.domains = json;
-            if(json.length > 0)
-              this.dateRange = [json[0].cTime, json[json.length-1].cTime];
+        if (!confirm(
+            `This operation will add the following domain(s) to ${this.siteChecked.length} site(s), continue ?\n\n` +
+            this.input.replace(/\,/g, '\n'))) return;
+
+        fetch('/api/public/domain', {
+          credentials: 'include',
+          method: 'put',
+          body: JSON.stringify({
+            sites: this.siteChecked,
+            domains: this.input.split(',').map(e => {
+              return e.replace(/(^\s*)|(\s*$)/g, '')
+            })
+          }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then(res => {
+          if (res.status === 200) {
+            location.reload();
+          } else {
+            alert('At least one of your domain already exists in the database, please check your input.');
+          }
         });
-    });
-	}
-}
+      },
+      changePass: function (e) {
+        // @TODO: Change Password
+      }
+    },
+    computed: {
+      filteredDomain: function () {
+        return this.domains.filter(e => {
+          var d = new Date(e.cTime);
+          if (this.siteChecked.indexOf(e.sid) > -1 && d > this.dateRange[0] && d < this.dateRange[1]) return e;
+        });
+      }
+    },
+    created: function () {
+      !self.fetch && console.error('fetch API is not supported, please upgrade the browser.');
+
+      fetch('api/admin/site', {
+        credentials: 'include'
+      }).then(res => {
+        return res.json().then(json => {
+          this.sites = json;
+          for (let entry of json) {
+            this.countryChecked.push(entry.id)
+          }
+        });
+      });
+
+      fetch('api/admin/domain', {
+        credentials: 'include'
+      }).then(res => {
+        return res.json().then(json => {
+          this.domains = json;
+          if (json.length > 0)
+            this.dateRange = [new Date(json[0].cTime), new Date(json[json.length - 1].cTime)];
+        });
+      });
+    }
+  }
 </script>
 <style>
   * {
