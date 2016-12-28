@@ -33,44 +33,27 @@
         </div>
       </template>
     </div>
-    <table id="data" class="unselectable table table-hover table-bordered">
-      <thead class="thead-inverse">
-        <tr>
-          <th>#</th>
-          <th>Site ID</th>
-          <th>Domain / Email Addr</th>
-          <th>Status</th>
-          <th>Applicant</th>
-        </tr>
-      </thead>
-      <tbody>
-        <template v-for="(domain, index) of filteredDomain">
-          <tr>
-            <td>{{ index + 1 }}</td>
-            <td>{{ domain.site }}</td>
-            <td>{{ domain.domain }}</td>
-            <td>{{ domain.status ? 'pending' : 'viewed' }}</td>
-            <td>{{ domain.applicant }}</td>
-          </tr>
-        </template>
-      </tbody>
-    </table>
-    <el-row type="flex" class="row-bg" justify="space-between">
-      <el-col :span="12">
-        <div class="input-group">
-          <span class="input-group-btn">
+    <domain-list :domains="filteredDomain"></domain-list>
+    <template>
+      <el-row type="flex" class="row-bg" justify="space-between">
+        <el-col :span="12">
+          <div class="input-group">
+            <span class="input-group-btn">
         <button @click="download" class="btn btn-info">Download</button>
       </span>
-        </div>
-      </el-col>
-      <el-col :span="8">
-        <el-date-picker v-model="dateRange" type="daterange" align="right" placeholder="Choose Date Range" :picker-options="pickerOptions">
-        </el-date-picker>
-      </el-col>
-    </el-row>
+          </div>
+        </el-col>
+        <el-col :span="8">
+          <el-date-picker v-model="dateRange" type="daterange" align="right" placeholder="Choose Date Range" :picker-options="pickerOptions">
+          </el-date-picker>
+        </el-col>
+      </el-row>
+    </template>
   </div>
 </template>
 <script>
+  import table from './table.vue'
+
   export default {
     name: 'app',
     data() {
@@ -112,48 +95,22 @@
     },
     methods: {
       download: function (e) {
+        var ret = 'Site-ID,domain,unitType\n';
+        
+        for (let entry of this.filteredDomain) {
+          ret += `${entry.site},${entry.domain},b2cUnit\n`;
+        }
 
-        fetch('api/admin/csv', {
-          method: 'post',
-          body: JSON.stringify(this.filteredDomain),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }).then(function (res) {
-          return res.blob();
-        }).then(function (blob) {
-          var link = document.createElement('a');
-          link.href = URL.createObjectURL(blob);
-          link.download = 'Domains.csv';
-          link.click();
-          URL.revokeObjectURL(link.href);
+        var blob = new Blob([ret], {
+          type: "text/plain"
         });
-      },
-      add: function (e) {
 
-        if (!confirm(
-            `This operation will add the following domain(s) to ${this.siteChecked.length} site(s), continue ?\n\n` +
-            this.input.replace(/\,/g, '\n'))) return;
+        var link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'Domains.csv';
+        link.click();
+        URL.revokeObjectURL(link.href);
 
-        fetch('/api/public/domain', {
-          credentials: 'include',
-          method: 'put',
-          body: JSON.stringify({
-            sites: this.siteChecked,
-            domains: this.input.split(',').map(e => {
-              return e.replace(/(^\s*)|(\s*$)/g, '')
-            })
-          }),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }).then(res => {
-          if (res.status === 200) {
-            location.reload();
-          } else {
-            alert('At least one of your domain already exists in the database, please check your input.');
-          }
-        });
       },
       changePass: function (e) {
         // @TODO: Change Password
@@ -185,19 +142,21 @@
         credentials: 'include'
       }).then(res => {
         return res.json().then(json => {
+          for (let entry of json) {
+            entry.status = (entry.cTime === entry.vTime ? 'Pending' : 'Viewed');
+          }
           this.domains = json;
           if (json.length > 0)
             this.dateRange = [new Date(json[0].cTime), new Date(json[json.length - 1].cTime)];
         });
       });
+    },
+    components: {
+      'domain-list': table
     }
   }
 </script>
 <style>
-  * {
-    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
-  }
-  
   .container {
     padding: 50px
   }
