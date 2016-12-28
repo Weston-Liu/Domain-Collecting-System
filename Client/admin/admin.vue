@@ -183,7 +183,9 @@ export default {
         credentials: 'include'
     }).then(res => {
         return res.json().then(json => {
-            this.domains = json
+            this.domains = json;
+            if(json.length > 0)
+              this.dateRange = [json[0].cTime, json[json.length-1].cTime];
         });
     });
 	}
