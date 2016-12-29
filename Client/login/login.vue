@@ -10,10 +10,10 @@
             </el-form-item>
             <el-row type="flex" justify="space-between">
                 <el-col :span="5">
-                    <el-button native-type="submit" size="large" type="primary">Login</el-button>
+                    <el-button native-type="submit" icon="edit" type="primary">Login</el-button>
                 </el-col>
                 <el-col :span="5">
-                    <el-button :plain="false" @click="forget" icon="information" size="large" type="warning">Forget Password ?</el-button>
+                    <el-button :plain="false" @click="forget" icon="information" type="warning">Forget Password ?</el-button>
                 </el-col>
             </el-row>
         </el-form>
@@ -24,9 +24,15 @@
         methods: {
             forget: function () {
                 this.$notify.error({
-                    title: 'Shame!',
+                    title: 'Shame!!!',
                     message: 'How dare you forget your password!!!',
-                    duration: 0
+                    duration: 3000,
+                    customClass: 'unselectable'
+                });
+                this.$message.error({
+                    message: 'What a Shame!!!',
+                    duration: 3000,
+                    customClass: 'unselectable'
                 });
 
             }
@@ -36,5 +42,9 @@
 <style scoped>
     .container {
         padding: 50px
+    }
+    
+    .el-button--warning {
+        float: right
     }
 </style>

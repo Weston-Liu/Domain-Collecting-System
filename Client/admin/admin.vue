@@ -219,11 +219,6 @@
   label {
     margin-right: 2em
   }
-  
-  .unselectable {
-    user-select: none;
-  }
-  
   .custom-control+.custom-control {
     margin-left: 0 !important
   }
