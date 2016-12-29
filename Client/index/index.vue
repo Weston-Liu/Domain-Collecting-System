@@ -1,11 +1,12 @@
 <template>
     <div id="app" class="container">
         <div class="right">
-            <span>{{ name }}</span>
-            <span> | </span>
-            <a @click="changePass">password</a>
-            <span> | </span>
-            <a href="api/public/logout">Logout</a></div>
+            <span>Welcome, {{ name }}</span>
+            <i class="el-icon-edit"></i>
+            <a @click="changePassShow" type="text" class="link">password</a>
+            <i class="el-icon-edit"></i>
+            <a href="api/public/logout" class="link">Logout</a>
+        </div>
         <h1>Domain Collecting System</h1>
         <h4>Country: {{ country }}
         </h4>
@@ -19,28 +20,29 @@
                 </label>
             </template>
         </div>
-        <table id="data" class="unselectable table table-hover table-bordered">
-            <thead class="thead-inverse">
-                <tr>
-                    <th>#</th>
-                    <th>Site ID</th>
-                    <th>Domain / Email Addr</th>
-                    <th>Status</th>
-                    <th>Applicant</th>
-                </tr>
-            </thead>
-            <tbody>
-                <template v-for="(domain, index) of filteredDomain">
-                    <tr>
-                        <td>{{ index + 1 }}</td>
-                        <td>{{ domain.site }}</td>
-                        <td>{{ domain.domain }}</td>
-                        <td>{{ domain.status ? 'pending' : 'viewed' }}</td>
-                        <td>{{ domain.applicant }}</td>
-                    </tr>
-                </template>
-            </tbody>
-        </table>
+        <domain-list :domains="paginatedDomain"></domain-list>
+        <template>
+            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes"
+                :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="filteredDomain.length">
+            </el-pagination>
+        </template>
+        <template>
+            <el-row type="flex" class="row-bg" justify="space-between">
+                <el-col :span="12">
+                    <el-button @click="download" type="info">Download</el-button>
+                </el-col>
+                <el-col :span="8">
+                    <el-input placeholder="Input domain..." v-model="input">
+                        <el-button @click="add" :disabled="hasDanger" slot="append" icon="upload2">Add</el-button>
+                    </el-input>
+                    <small class="form-text text-muted">You can use comma to seperate mutiple domains.</small>
+                    <div v-if="warnInfo" class="warn"><i class="el-icon-warning"></i>{{ warnInfo }}</div>
+                    <div v-if="errorInfo" class="error"><i class="el-icon-circle-cross"></i>{{ errorInfo }}</div>
+                </el-col>
+            </el-row>
+        </template>
+        <!-- Original -->
+        <!--
         <div class="row">
             <div class="col-lg-6">
                 <div class="input-group">
@@ -59,27 +61,46 @@
       </span>
                     </div>
                     <small class="form-text text-muted">You can use comma to seperate mutiple domains.</small>
-                    <div class="form-control-feedback">{{ warnInfo }}</div>
-                    <div class="form-control-feedback">{{ errorInfo }}</div>
+                    <div class="el-form-item__error">{{ errorInfo }}</div>
                 </div>
             </div>
         </div>
+-->
+        <change-pass :visible="changePassVisible" v-on:cpclosed="changePassClose"></change-pass>
     </div>
 </template>
 <script>
+    import table from '../assets/table.vue'
+    import dialog from '../assets/changePass.vue'
     export default {
         name: 'app',
         data() {
             return {
+                // pagination
+                currentPage: 1,
+                pageSize: 10,
+                pageSizes: [10, 50, 100, 1000],
+                //basic info
                 name: '',
                 country: '',
+                // domain list
                 sites: [],
                 domains: [],
                 checked: [],
-                input: ''
+                input: '',
+                // change pass dialog
+                changePassVisible: false,
             }
         },
         methods: {
+            // pagination
+            handleSizeChange: function (val) {
+                this.pageSize = val;
+            },
+            handleCurrentChange: function (val) {
+                this.currentPage = val;
+            },
+            // domain list
             download: function (e) {
 
                 fetch('api/public/xlsx', {
@@ -127,8 +148,12 @@
                     }
                 });
             },
-            changePass: function (e) {
-                // @TODO: Change Password
+            // change pass
+            changePassShow: function () {
+                this.changePassVisible = true;
+            },
+            changePassClose: function () {
+                this.changePassVisible = false;
             }
         },
         computed: {
@@ -137,6 +162,10 @@
                     if (this.checked.indexOf(e.sid) > -1)
                         return e;
                 });
+            },
+
+            paginatedDomain: function () {
+                return this.filteredDomain.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
             },
             hasWarning: function () {
                 return this.checked.length > 1;
@@ -148,19 +177,24 @@
             },
             warnInfo: function () {
                 return this.checked.length > 1 ?
-                    `Attention: You are adding domain to ${this.checked.length} sites. ` : '';
+                    ` You are adding domain to ${this.checked.length} sites. ` : '';
             },
             errorInfo: function () {
                 return this.hasDanger ?
-                    (this.checked.length === 0 ? 'Error: Please choose a targeted site.' :
-                        'Error: Domain format  error.') : '';
+                    (this.checked.length === 0 ? ' Please choose a targeted site.' :
+                        ' Domain format error.') : '';
             },
             validated: function () {
                 return !this.warnInfo && !this.errorInfo;
             }
         },
         created: function () {
-            !self.fetch && console.error('fetch API is not supported, please upgrade the browser.');
+            // compatibility check
+            !self.fetch && this.$notify.error({
+                title: 'Warning',
+                message: 'fetch API is not supported, please upgrade the browser.',
+                duration: 0
+            });
 
             fetch('api/public/info', {
                 credentials: 'include'
@@ -181,11 +215,15 @@
             }).then((res) => {
                 return res.json().then((json) => {
                     for (let entry of json) {
-                        entry.status = entry.cTime == entry.vTime;
+                        entry.status = (entry.cTime === entry.vTime ? 'Pending' : 'Viewed');
                     }
                     this.domains = json;
                 });
             });
+        },
+        components: {
+            'domain-list': table,
+            'change-pass': dialog
         }
     }
 </script>
@@ -194,11 +232,26 @@
         margin-right: 2em
     }
     
+    .warn {
+        font-size: 14px;
+        color: #F7BA2A
+    }
+    
+    .error {
+        font-size: 14px;
+        color: #FF4949
+    }
+    
     .custom-control+.custom-control {
         margin-left: 0 !important
     }
     
     .col-lg-6 {
         margin-bottom: 1em;
+    }
+    
+    .el-pagination {
+        text-align: center;
+        margin-top: 1em;
     }
 </style>

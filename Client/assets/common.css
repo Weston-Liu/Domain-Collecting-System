@@ -15,3 +15,13 @@
 .right {
     float: right
 }
+
+.link {
+    color: #1F2D3D !important;
+    cursor: pointer
+}
+
+.link:hover {
+    text-decoration: none;
+    color: #99A9BF !important;
+}

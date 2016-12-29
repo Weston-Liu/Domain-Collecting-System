@@ -1,11 +1,12 @@
 <template>
   <div id="app" class="container">
     <div class="right">
-      <span>Welcome! My lord!</span>
-      <span> | </span>
-      <a class="link" @click="changePassShow">password</a>
-      <span> | </span>
-      <a href="api/public/logout">Logout</a></div>
+      <span>Welcome, My lord</span>
+      <i class="el-icon-edit"></i>
+      <a @click="changePassShow" type="text" class="link">password</a>
+      <i class="el-icon-edit"></i>
+      <a href="api/public/logout" class="link">Logout</a>
+    </div>
     <h1>Domain Collecting System</h1>
     <div class="unselectable">
       <label>Select Country</label>
@@ -55,8 +56,8 @@
   </div>
 </template>
 <script>
-  import table from './table.vue'
-  import dialog from './changePass.vue'
+  import table from '../assets/table.vue'
+  import dialog from '../assets/changePass.vue'
   import siteManagement from './siteManagement.vue'
 
   export default {
@@ -235,12 +236,9 @@
     display: block !important
   }
   
-  .link {
-    cursor: pointer;
-  }
-  
   .el-pagination {
     text-align: center;
     margin-top: 1em;
   }
+  
 </style>
