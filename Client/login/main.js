@@ -1,7 +1,10 @@
 import Vue from 'vue'
 import app from './login.vue'
 
-require ('../assets/bootstrap.min.css')
+import 'element-ui/lib/theme-default/index.css'
+import ElementUI from 'element-ui'
+
+Vue.use(ElementUI);
 
 new Vue({
   el: '#app',

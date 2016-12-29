@@ -33,11 +33,11 @@
         </div>
       </template>
     </div>
-    <domain-list :domains="filteredDomain"></domain-list>
+    <domain-list :domains="paginatedDomain"></domain-list>
     <template>
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[50, 100, 1000]"
-          :page-size="50" layout="total, sizes, prev, pager, next, jumper" :total="400">
-        </el-pagination>
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes"
+        :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="filteredDomain.length">
+      </el-pagination>
     </template>
     <site-management></site-management>
     <template>
@@ -66,12 +66,18 @@
 
     data() {
       return {
-        currentPage4: 4,
+        // pagination
+        currentPage: 1,
+        pageSize: 10,
+        pageSizes:[10, 50, 100, 1000],
+        // domain list
         domains: [],
         countryChecked: [],
         siteChecked: [],
         sites: [],
+        // date picker
         dateRange: [],
+        // change pass dialog
         changePassVisible: false,
 
         pickerOptions: {
@@ -104,15 +110,14 @@
       }
     },
     methods: {
-
+      // pagination
       handleSizeChange: function (val) {
-        console.log(`每页 ${val} 条`);
+        this.pageSize = val;
       },
       handleCurrentChange: function (val) {
         this.currentPage = val;
-        console.log(`当前页: ${val}`);
       },
-
+      // domain list
       download: function () {
         var ret = 'Site-ID,domain,unitType\n';
 
@@ -131,6 +136,7 @@
         URL.revokeObjectURL(link.href);
 
       },
+      // change pass
       changePassShow: function () {
         this.changePassVisible = true;
       },
@@ -139,11 +145,15 @@
       }
     },
     computed: {
+
       filteredDomain: function () {
         return this.domains.filter(e => {
           var d = new Date(e.cTime);
           if (this.siteChecked.indexOf(e.sid) > -1 && d > this.dateRange[0] && d < this.dateRange[1]) return e;
         });
+      },
+      paginatedDomain: function () {
+        return this.filteredDomain.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
       }
     },
     created: function () {
@@ -245,5 +255,10 @@
   
   .link {
     cursor: pointer;
+  }
+
+  .el-pagination{
+    text-align: center;
+    margin-top: 1em;
   }
 </style>
