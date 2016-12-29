@@ -8,16 +8,32 @@
             <el-form-item label="Password">
                 <el-input name="p" id="pass" type="password" placeholder="Username"></el-input>
             </el-form-item>
-            <el-button native-type="submit" type="primary">Submit</el-button>
+            <el-row type="flex" justify="space-between">
+                <el-col :span="5">
+                    <el-button native-type="submit" size="large" type="primary">Login</el-button>
+                </el-col>
+                <el-col :span="5">
+                    <el-button :plain="false" @click="forget" icon="information" size="large" type="warning">Forget Password ?</el-button>
+                </el-col>
+            </el-row>
         </el-form>
     </div>
 </template>
-<style>
-    #app {
-        font-family: 'Avenir', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
+<script>
+    export default {
+        methods: {
+            forget: function () {
+                this.$notify.error({
+                    title: 'Shame!',
+                    message: 'How dare you forget your password!!!',
+                    duration: 0
+                });
+
+            }
+        }
     }
+</script>
+<style scoped>
     .container {
         padding: 50px
     }

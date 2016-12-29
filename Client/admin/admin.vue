@@ -204,12 +204,6 @@
   }
 </script>
 <style>
-  #app {
-    font-family: 'Avenir', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-  
   .el-row {
     margin-top: 1em
   }

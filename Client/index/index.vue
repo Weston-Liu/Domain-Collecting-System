@@ -67,20 +67,19 @@
     </div>
 </template>
 <script>
-
-export default {
-  name: 'app',
-  data () {
-    return {
-            name: '',
-            country:'',
-            sites:[],
-            domains: [],
-            checked: [],
-            input: ''
-        }
-  },
-  methods: {
+    export default {
+        name: 'app',
+        data() {
+            return {
+                name: '',
+                country: '',
+                sites: [],
+                domains: [],
+                checked: [],
+                input: ''
+            }
+        },
+        methods: {
             download: function (e) {
 
                 fetch('api/public/xlsx', {
@@ -102,7 +101,9 @@ export default {
             },
             add: function (e) {
 
-                if (!confirm(`This operation will add the following domain(s) to ${this.checked.length} site(s), continue?\n\n` + this.input.replace(/\,/g, '\n'))) return;
+                if (!confirm(
+                        `This operation will add the following domain(s) to ${this.checked.length} site(s), continue?\n\n` +
+                        this.input.replace(/\,/g, '\n'))) return;
 
                 fetch('/api/public/domain', {
                     credentials: 'include',
@@ -120,7 +121,9 @@ export default {
                     if (res.status === 200) {
                         location.reload();
                     } else {
-                        alert('At least one of your domain already exists in the database, please check your input.');
+                        alert(
+                            'At least one of your domain already exists in the database, please check your input.'
+                        );
                     }
                 });
             },
@@ -139,14 +142,18 @@ export default {
                 return this.checked.length > 1;
             },
             hasDanger: function () {
-                return this.checked.length === 0 || !/^([\w\-]+@)?[a-zA-Z\d]((\-)?[a-zA-Z\d])*(\.[a-zA-Z\d]((\-)?[a-zA-Z\d])*)*(\.[a-zA-Z]{2,4})(,([\w\-]+@)?[a-zA-Z\d]((\-)?[a-zA-Z\d])*(\.[a-zA-Z\d]((\-)?[a-zA-Z\d])*)*(\.[a-zA-Z]{2,4}))*$/.test(this.input);
+                return this.checked.length === 0 || !
+                    /^([\w\-]+@)?[a-zA-Z\d]((\-)?[a-zA-Z\d])*(\.[a-zA-Z\d]((\-)?[a-zA-Z\d])*)*(\.[a-zA-Z]{2,4})(,([\w\-]+@)?[a-zA-Z\d]((\-)?[a-zA-Z\d])*(\.[a-zA-Z\d]((\-)?[a-zA-Z\d])*)*(\.[a-zA-Z]{2,4}))*$/
+                    .test(this.input);
             },
             warnInfo: function () {
-                return this.checked.length > 1 ? `Attention: You are adding domain to ${this.checked.length} sites. ` : '';
+                return this.checked.length > 1 ?
+                    `Attention: You are adding domain to ${this.checked.length} sites. ` : '';
             },
             errorInfo: function () {
                 return this.hasDanger ?
-                    (this.checked.length === 0 ? 'Error: Please choose a targeted site.' : 'Error: Domain format  error.') : '';
+                    (this.checked.length === 0 ? 'Error: Please choose a targeted site.' :
+                        'Error: Domain format  error.') : '';
             },
             validated: function () {
                 return !this.warnInfo && !this.errorInfo;
@@ -163,7 +170,7 @@ export default {
                     this.country = json.country;
                     this.sites = json.sites;
 
-                    for(let entry of this.sites){
+                    for (let entry of this.sites) {
                         this.checked.push(entry.id);
                     }
                 });
@@ -180,7 +187,7 @@ export default {
                 });
             });
         }
-}
+    }
 </script>
 <style>
     .container {
@@ -202,7 +209,8 @@ export default {
     .custom-control+.custom-control {
         margin-left: 0 !important
     }
-    .col-lg-6{
+    
+    .col-lg-6 {
         margin-bottom: 1em;
     }
 </style>
