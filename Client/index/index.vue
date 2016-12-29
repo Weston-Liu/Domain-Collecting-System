@@ -23,7 +23,7 @@
         <domain-list :domains="paginatedDomain"></domain-list>
         <template>
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes"
-                :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="filteredDomain.length">
+                :page-size="pageSize" layout="sizes, prev, pager, next" :total="filteredDomain.length">
             </el-pagination>
         </template>
         <template>
@@ -31,7 +31,7 @@
                 <el-col :span="12">
                     <el-button @click="download" type="info">Download</el-button>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="12">
                     <el-input placeholder="Input domain..." v-model="input">
                         <el-button @click="add" :disabled="hasDanger" slot="append" icon="upload2">Add</el-button>
                     </el-input>

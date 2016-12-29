@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="Change Password" v-model="visible" :show-close="false" :close-on-click-modal="false">
+    <el-dialog class="unselectable" title="Change Password" v-model="visible" :show-close="false" :close-on-click-modal="false">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
             <el-form-item label="Original Password" prop="op">
                 <el-input v-model="ruleForm.op" auto-complete="off"></el-input>
@@ -13,7 +13,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="close">Cancel</el-button>
-            <el-button type="primary" @click="close">Submit</el-button>
+            <el-button type="primary" @click="submit">Submit</el-button>
         </div>
     </el-dialog>
 </template>
@@ -21,23 +21,6 @@
     export default {
         props: ['visible'],
         data() {
-            var validateOldPass = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('Please input the password.'));
-                } else {
-                    callback();
-                }
-            };
-            var validateNewPass = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('Please input the password.'));
-                } else {
-                    if (this.ruleForm.np !== '') {
-                        this.$refs.ruleForm.validateField('cnp');
-                    }
-                    callback();
-                }
-            };
             var validateNewPassConfirm = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error('Please input the new password again.'));
@@ -55,11 +38,13 @@
                 },
                 rules: {
                     op: [{
-                        validator: validateOldPass,
-                        trigger: 'change'
+                        required: true,
+                        message: 'Please input the old password.',
+                        trigger: 'blur'
                     }],
                     np: [{
-                        validator: validateNewPass,
+                        required: true,
+                        message: 'Please input the new password.',
                         trigger: 'blur'
                     }],
                     cnp: [{
@@ -76,10 +61,19 @@
             submit: function (ev) {
                 this.$refs.ruleForm.validate((valid) => {
                     if (valid) {
-                        alert('submit!');
-                    } else {
-                        console.log('error submit!!');
-                        return false;
+
+                        // fetch
+                        fetch('api/public/password', {
+                            credentials: 'include',
+                            method: 'post'
+                        }).then(res => {
+                            if (res.status == 200) {
+                                console.log('ok');
+                            }else{
+                                console.log('err');
+                            }
+                        });
+
                     }
                 });
             }

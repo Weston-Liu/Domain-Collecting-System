@@ -116,6 +116,7 @@ router.post('/login', function (req, res) {
             if (results && results.length > 0) {
                 req.session.uid = results[0].id;
                 req.session.name = results[0].name;
+                req.session.pass = results[0].password;
                 req.session.role = results[0].role;
                 req.session.cid = results[0].cid;
                 req.session.country = results[0].country;
@@ -157,6 +158,8 @@ router.post('/login', function (req, res) {
         })
 });
 
+
+
 /**
  * @returns: 302
  */
@@ -165,6 +168,11 @@ router.get('/logout', function (req, res) {
         res.redirect('/login');
     });
 });
+
+/*********************************************************************************************************/
+//                                          File
+/*********************************************************************************************************/
+
 
 /**
  * @returns: blob
@@ -185,5 +193,30 @@ router.post('/xlsx', function (req, res) {
 
     res.send(buffer);
 })
+
+
+
+/*********************************************************************************************************/
+//                                          Change Pass
+/*********************************************************************************************************/
+
+/**
+ * @version: 2.0 
+ * @param: op [string], np [string]
+ * @returns: 200 / 404
+ */
+
+router.post('/password', function (req, res) {
+
+    if (req.session.pass !== req.body.op)
+        res.sendStatus(404);
+    else {
+        var sql = 'UPDATE `user` SET `password` = ? WHERE `id` = ?';
+        var params = [req.body.np, req.session.uid];
+        res.sendStatus(200);
+    }
+});
+
+
 
 module.exports = router;
