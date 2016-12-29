@@ -4,7 +4,14 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-  .unselectable {
+.unselectable {
     user-select: none;
-  }
-  
+}
+
+.container {
+    padding: 50px
+}
+
+.right {
+    float: right
+}

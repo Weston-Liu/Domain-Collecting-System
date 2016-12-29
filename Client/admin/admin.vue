@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="container">
-    <div class="logout">
+    <div class="right">
       <span>Welcome! My lord!</span>
       <span> | </span>
       <a class="link" @click="changePassShow">password</a>
@@ -69,7 +69,7 @@
         // pagination
         currentPage: 1,
         pageSize: 10,
-        pageSizes:[10, 50, 100, 1000],
+        pageSizes: [10, 50, 100, 1000],
         // domain list
         domains: [],
         countryChecked: [],
@@ -208,17 +208,10 @@
     margin-top: 1em
   }
   
-  .container {
-    padding: 50px
-  }
-  
-  .logout {
-    float: right;
-  }
-  
   label {
     margin-right: 2em
   }
+  
   .custom-control+.custom-control {
     margin-left: 0 !important
   }
@@ -245,8 +238,8 @@
   .link {
     cursor: pointer;
   }
-
-  .el-pagination{
+  
+  .el-pagination {
     text-align: center;
     margin-top: 1em;
   }

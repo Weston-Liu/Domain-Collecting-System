@@ -1,6 +1,6 @@
 <template>
     <div id="app" class="container">
-        <div class="logout">
+        <div class="right">
             <span>{{ name }}</span>
             <span> | </span>
             <a @click="changePass">password</a>
@@ -190,20 +190,8 @@
     }
 </script>
 <style>
-    .container {
-        padding: 50px
-    }
-    
-    .logout {
-        float: right;
-    }
-    
     label {
         margin-right: 2em
-    }
-    
-    .unselectable {
-        user-select: none;
     }
     
     .custom-control+.custom-control {

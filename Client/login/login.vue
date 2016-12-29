@@ -13,7 +13,7 @@
                     <el-button native-type="submit" icon="edit" type="primary">Login</el-button>
                 </el-col>
                 <el-col :span="5">
-                    <el-button :plain="false" @click="forget" icon="information" type="warning">Forget Password ?</el-button>
+                    <el-button :plain="false" @click="forget" icon="information" class="right" type="warning">Forget Password ?</el-button>
                 </el-col>
             </el-row>
         </el-form>
@@ -34,17 +34,7 @@
                     duration: 3000,
                     customClass: 'unselectable'
                 });
-
             }
         }
     }
 </script>
-<style scoped>
-    .container {
-        padding: 50px
-    }
-    
-    .el-button--warning {
-        float: right
-    }
-</style>
