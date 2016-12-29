@@ -41,31 +41,6 @@
                 </el-col>
             </el-row>
         </template>
-        <!-- Original -->
-        <!--
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="input-group">
-                    <span class="input-group-btn">
-         <button @click="download" class="btn btn-info">Download</button>
-      </span>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="form-group" :class="{'has-warning': hasWarning, 'has-danger': hasDanger, 'has-success':validated}">
-                    <div class="input-group">
-                        <input type="text" class="form-control" :class="{'form-control-warning': hasWarning, 'form-control-danger': hasDanger, 'form-control-success':validated}"
-                            v-model="input" placeholder="Input domain...">
-                        <span class="input-group-btn">
-        <button @click="add" :disabled="hasDanger" id="add" class="btn btn-secondary" :class="{'btn-danger':hasDanger,'btn-warning':hasWarning, 'btn-success':validated}" type="button">Add</button>
-      </span>
-                    </div>
-                    <small class="form-text text-muted">You can use comma to seperate mutiple domains.</small>
-                    <div class="el-form-item__error">{{ errorInfo }}</div>
-                </div>
-            </div>
-        </div>
--->
         <change-pass :visible="changePassVisible" v-on:cpclosed="changePassClose"></change-pass>
     </div>
 </template>
@@ -120,33 +95,58 @@
                         URL.revokeObjectURL(link.href);
                     });
             },
+            // add domains
             add: function (e) {
+                // confirm operation
+                this.$confirm(
+                    `This operation will add the following domain(s) to ${this.checked.length} site(s), continue?\n\n` +
+                    this.input.replace(/\,/g, '\n'), 'Attention', {
+                        type: 'warning'
+                    }).then(() => {
+                    // add domain to server
+                    fetch('/api/public/domain', {
+                        credentials: 'include',
+                        method: 'put',
+                        body: JSON.stringify({
+                            sites: this.checked,
+                            domains: this.input.split(',').map((e) => {
+                                return e.replace(/(^\s*)|(\s*$)/g, '')
+                            })
+                        }),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }).then((res) => {
+                        if (res.status === 200) {
+                            // show success msg
+                            this.$message({
+                                type: 'success',
+                                message: 'Success.',
+                                duration: 4000
+                            });
+                            // fetch new domain list 
+                            fetch('api/public/domain', {
+                                credentials: 'include'
+                            }).then((res) => {
+                                return res.json().then((json) => {
+                                    for (let entry of json) {
+                                        entry.status = (entry.cTime === entry.vTime ?
+                                            'Pending' : 'Viewed');
+                                    }
+                                    this.domains = json;
+                                });
+                            });
+                        } else {
+                            // show error msg
+                            this.$message({
+                                type: 'error',
+                                message: 'At least one of your domain already exists in the database, please check your input.',
+                                duration: 4000
+                            });
+                        }
+                    });
+                }).catch(() => {});
 
-                if (!confirm(
-                        `This operation will add the following domain(s) to ${this.checked.length} site(s), continue?\n\n` +
-                        this.input.replace(/\,/g, '\n'))) return;
-
-                fetch('/api/public/domain', {
-                    credentials: 'include',
-                    method: 'put',
-                    body: JSON.stringify({
-                        sites: this.checked,
-                        domains: this.input.split(',').map((e) => {
-                            return e.replace(/(^\s*)|(\s*$)/g, '')
-                        })
-                    }),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }).then((res) => {
-                    if (res.status === 200) {
-                        location.reload();
-                    } else {
-                        alert(
-                            'At least one of your domain already exists in the database, please check your input.'
-                        );
-                    }
-                });
             },
             // change pass
             changePassShow: function () {
@@ -163,7 +163,6 @@
                         return e;
                 });
             },
-
             paginatedDomain: function () {
                 return this.filteredDomain.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
             },

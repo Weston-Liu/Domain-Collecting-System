@@ -13,7 +13,7 @@
                     <el-button native-type="submit" icon="edit" type="primary">Login</el-button>
                 </el-col>
                 <el-col :span="5">
-                    <el-button :plain="false" @click="forget" icon="information" class="right" type="warning">Forget Password ?</el-button>
+                    <el-button :plain="true" @click="forget" icon="information" class="right" type="warning">Forget Password ?</el-button>
                 </el-col>
             </el-row>
         </el-form>
