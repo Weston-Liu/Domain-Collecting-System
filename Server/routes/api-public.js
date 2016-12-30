@@ -100,6 +100,7 @@ router.post('/login', function (req, res) {
     var authentication = new Promise((resolve, reject) => {
         var sql = 'SELECT user.id AS id, ' +
             'user.name AS name, ' +
+            'user.password AS password, ' +
             'user.role AS role, ' +
             'country.id AS cid, ' +
             'country.name AS country ' +
@@ -208,15 +209,22 @@ router.post('/xlsx', function (req, res) {
 
 router.post('/password', function (req, res) {
 
-    if (req.session.pass !== req.body.op)
-        res.sendStatus(404);
-    else {
+    if (req.session.pass !== req.body.op) {
+        res.sendStatus(403);
+    } else {
         var sql = 'UPDATE `user` SET `password` = ? WHERE `id` = ?';
         var params = [req.body.np, req.session.uid];
-        res.sendStatus(200);
+        DB.connection.query(sql, params, (err, results, fields) => {
+            if (err) {
+                console.log(err);
+                res.sendStatus(500);
+            } else {
+                req.session.pass = req.body.np;
+                res.sendStatus(200);
+            }
+        });
     }
 });
-
 
 
 module.exports = router;
