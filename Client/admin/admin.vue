@@ -9,7 +9,8 @@
     </div>
     <h1>Domain Collecting System</h1>
     <div class="unselectable">
-      <label>Select Country</label>
+      <span>Country</span>
+      <el-button type="warning" icon="edit" size="mini"></el-button>
       <div id="countries">
         <template v-for="country of sites">
           <label class="custom-control custom-checkbox">
@@ -21,7 +22,7 @@
       </div>
       <template v-for="country of sites">
         <div v-if="countryChecked.indexOf(country.id) !== -1" class="sites">
-          <span class="tag tag-pill tag-success cname">{{ country.name }}</span>
+          <el-tag class="cname" type="success" color="#e7faf0">{{ country.name }}<i class="el-icon-edit cname-modifier" @click="editSites"></i></el-tag>
           <div>
             <template v-for="site of country.sites">
               <label class="custom-control custom-checkbox">
@@ -40,7 +41,7 @@
         :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="filteredDomain.length">
       </el-pagination>
     </template>
-    <site-management></site-management>
+    <!--site-management></site-management-->
     <template>
       <el-row type="flex" class="row-bg" justify="space-between">
         <el-col :span="12">
@@ -111,6 +112,11 @@
       }
     },
     methods: {
+      // category
+      editSites: function(e){
+        console.log(e.target);
+      },
+
       // pagination
       handleSizeChange: function (val) {
         this.pageSize = val;
@@ -225,7 +231,7 @@
   .cname {
     float: right;
     position: relative;
-    top: -2em;
+    top: -2.3em;
   }
   
   .col-lg-6 {
@@ -241,4 +247,22 @@
     margin-top: 1em;
   }
   
+  .el-button--mini {
+    float: right;
+    padding: 5px !important;
+    font-size: 2px !important;
+  }
+  
+  #countries {
+    margin-top: 0.5em
+  }
+  
+  .cname-modifier {
+    margin-left: 0.5em
+  }
+
+  .cname-modifier:hover {
+    color:#087b3b;
+    cursor: pointer
+  }
 </style>

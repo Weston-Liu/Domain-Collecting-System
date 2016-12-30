@@ -61,7 +61,6 @@
             submit: function (ev) {
                 this.$refs.ruleForm.validate((valid) => {
                     if (valid) {
-                        console.log(this.ruleForm);
                         // fetch
                         fetch('api/public/password', {
                             credentials: 'include',

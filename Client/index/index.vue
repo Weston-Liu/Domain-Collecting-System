@@ -251,6 +251,6 @@
     
     .el-pagination {
         text-align: center;
-        margin-top: 1em;
+        margin: 1em 0 1em 0;
     }
 </style>
