@@ -45,8 +45,8 @@
     </div>
 </template>
 <script>
-    import table from '../assets/table.vue'
-    import dialog from '../assets/changePass.vue'
+    import table from '../components/table.vue'
+    import dialog from '../components/changePass.vue'
     export default {
         name: 'app',
         data() {

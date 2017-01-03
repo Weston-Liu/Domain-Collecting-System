@@ -22,7 +22,7 @@
       </div>
       <template v-for="country of sites">
         <div v-if="countryChecked.indexOf(country.id) !== -1" class="sites">
-          <el-tag class="cname" type="success" color="#e7faf0">{{ country.name }}<i class="el-icon-edit cname-modifier" @click="editSites"></i></el-tag>
+          <el-tag class="cname" type="success" color="#e7faf0">{{ country.name }}<i class="el-icon-edit cname-modifier" @click="editSites(country.id)"></i></el-tag>
           <div>
             <template v-for="site of country.sites">
               <label class="custom-control custom-checkbox">
@@ -41,7 +41,6 @@
         :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="filteredDomain.length">
       </el-pagination>
     </template>
-    <!--site-management></site-management-->
     <template>
       <el-row type="flex" class="row-bg" justify="space-between">
         <el-col :span="12">
@@ -57,9 +56,8 @@
   </div>
 </template>
 <script>
-  import table from '../assets/table.vue'
-  import dialog from '../assets/changePass.vue'
-  import siteManagement from './siteManagement.vue'
+  import table from '../components/table.vue'
+  import dialog from '../components/changePass.vue'
 
   export default {
     name: 'app',
@@ -114,7 +112,7 @@
     methods: {
       // category
       editSites: function(e){
-        console.log(e.target);
+        console.log(e);
       },
 
       // pagination
@@ -205,8 +203,7 @@
     },
     components: {
       'domain-list': table,
-      'change-pass': dialog,
-      'site-management': siteManagement
+      'change-pass': dialog
     }
   }
 </script>

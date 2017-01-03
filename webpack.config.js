@@ -28,12 +28,10 @@ module.exports = {
       }
     }, {
       test: /\.js$/,
-      loader: 'babel-loader',
-      exclude: /node_modules/
+      loader: 'babel-loader'
     }, {
       test: /\.css$/,
-      loader: 'style-loader!css-loader'//,
-     // exclude: /node_modules/
+      loader: 'style-loader!css-loader'
     }, {
       test: /\.(eot|svg|ttf|woff|woff2)(\?\S*)?$/,
       loader: 'file-loader'

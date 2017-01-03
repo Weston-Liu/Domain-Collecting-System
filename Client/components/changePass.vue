@@ -22,9 +22,7 @@
         props: ['visible'],
         data() {
             var validateNewPassConfirm = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('Please input the new password again.'));
-                } else if (value !== this.ruleForm.np) {
+                if (value !== this.ruleForm.np) {
                     callback(new Error('Two new passwords are not the same.'));
                 } else {
                     callback();
@@ -48,8 +46,12 @@
                         trigger: 'blur'
                     }],
                     cnp: [{
+                        required: true,
+                        message: 'Please input the new password again.',
+                        trigger: 'blur'
+                    }, {
                         validator: validateNewPassConfirm,
-                        trigger: 'change'
+                        trigger: 'blur'
                     }]
                 }
             };

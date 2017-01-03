@@ -13,7 +13,7 @@
   "dependencies": {
     "body-parser": "^1.15.2",
     "ejs": "^2.5.5",
-    "element-ui": "^1.0.9",
+    "element-ui": "^1.1.2",
     "express": "^4.14.0",
     "express-minify-html": "^0.9.0",
     "express-mysql-session": "^1.2.0",

@@ -4,11 +4,11 @@ import app from './admin.vue'
 require('../assets/bootstrap.min.css')
 
 import 'element-ui/lib/theme-default/index.css'
+import '../assets/common.css'
+
 import ElementUI from 'element-ui'
 import lang from 'element-ui/lib/locale/lang/en'
 import locale from 'element-ui/lib/locale'
-
-import '../assets/common.css'
 
 locale.use(lang)
 Vue.use(ElementUI);
