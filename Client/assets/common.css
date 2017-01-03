@@ -1,6 +1,5 @@
 * {
-    /*font-family: 'Avenir', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;*/
-    font-family: -apple-system,"Helvetica Neue","Hiragino Sans GB",STHeiti,"Source Han Sans SC","Noto Sans CJK SC","Source Han Sans CN","Noto Sans SC","Source Han Sans TC","Noto Sans CJK TC","Microsoft YaHei","Microsoft JhengHei","WenQuanYi Micro Hei",Arial,sans-serif;
+    font-family: 'Avenir', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -27,6 +26,6 @@
     color: #99A9BF !important;
 }
 
-  a {
+a {
     text-decoration: none
-  }
+}

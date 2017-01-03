@@ -9,7 +9,6 @@ const bodyParser = require('body-parser');
 const minifyHTML = require('express-minify-html');
 const compression = require('compression')
 
-
 // dev-use-only
 if (process.env.NODE_ENV !== 'production') {
 
@@ -34,6 +33,7 @@ if (process.env.NODE_ENV !== 'production') {
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs')
 
+
 // middlewares
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -52,7 +52,6 @@ app.use(minifyHTML({
     }
 }));
 app.use(compression());
-
 
 // session
 app.use(session({
