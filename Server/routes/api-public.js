@@ -66,19 +66,19 @@ router.put('/domain', function (req, res) {
  * @returns:  [{}.. [object]]
  */
 router.get('/domain', function (req, res) {
-    var sql = "SELECT " +
-        "site.id AS sid, " +
-        "site.name AS site, " +
-        "data.domain AS domain, " +
-        "data.createTime AS cTime, " +
-        "data.viewTime AS vTime, " +
-        "user.name AS applicant " +
-        "FROM " +
-        "`data` " +
-        "INNER JOIN site ON site.id = data.site " +
-        "INNER JOIN user ON user.id = data.applicant " +
-        "WHERE user.country = ? " +
-        "ORDER BY cTime";
+    var sql = "SELECT \
+        site.id AS sid, \
+        site.name AS site, \
+        data.domain AS domain, \
+        data.createTime AS cTime, \
+        data.viewTime AS vTime, \
+        user.name AS applicant \
+        FROM \
+        `data` \
+        INNER JOIN site ON site.id = data.site \
+        INNER JOIN user ON user.id = data.applicant \
+        WHERE user.country = ? \
+        ORDER BY cTime";
 
     DB.connection.query(sql, [req.session.cid], (err, results, fields) => {
         err && console.log(err);
@@ -98,14 +98,14 @@ router.get('/domain', function (req, res) {
 router.post('/login', function (req, res) {
 
     var authentication = new Promise((resolve, reject) => {
-        var sql = 'SELECT user.id AS id, ' +
-            'user.name AS name, ' +
-            'user.password AS password, ' +
-            'user.role AS role, ' +
-            'country.id AS cid, ' +
-            'country.name AS country ' +
-            'FROM `user` INNER JOIN `country` ON user.country = country.id ' +
-            'WHERE user.name = ? AND user.password = ?';
+        var sql = 'SELECT user.id AS id, \
+            user.name AS name, \
+            user.password AS password, \
+            user.role AS role, \
+            country.id AS cid, \
+            country.name AS country \
+            FROM `user` INNER JOIN `country` ON user.country = country.id \
+            WHERE user.name = ? AND user.password = ?';
 
         var params = [req.body.u, req.body.p];
 

@@ -3,9 +3,9 @@ var webpack = require('webpack')
 
 module.exports = {
   entry: {
-    index: ['./client/index/main.js', 'webpack-hot-middleware/client'],
-    admin: ['./client/admin/main.js', 'webpack-hot-middleware/client'],
-    login: ['./client/login/main.js', 'webpack-hot-middleware/client']
+    index: ['./client/index/main.js'],
+    admin: ['./client/admin/main.js'],
+    login: ['./client/login/main.js']
   },
   output: {
     filename: './[name].js?[hash]',
@@ -18,9 +18,6 @@ module.exports = {
       loader: 'vue-loader',
       options: {
         loaders: {
-          // Since sass-loader (weirdly) has SCSS as its default parse mode, we map
-          // the "scss" and "sass" values for the lang attribute to the right configs here.
-          // other preprocessors should work out of the box, no loader config like this nessessary.
           'scss': 'vue-style-loader!css-loader!sass-loader',
           'sass': 'vue-style-loader!css-loader!sass-loader?indentedSyntax'
         }
@@ -33,17 +30,14 @@ module.exports = {
       test: /\.css$/,
       loader: 'style-loader!css-loader'
     }, {
-      test: /\.(eot|svg|ttf|woff|woff2)(\?\S*)?$/,
-      loader: 'file-loader'
-    }, {
-      test: /\.(png|jpg|gif|svg)$/,
+      test: /\.(png|jpg|gif|eot|svg|ttf|woff|woff2)(\?\S*)?$/,
       loader: 'file-loader'
     }]
   },
   plugins: [
-    new webpack.optimize.OccurrenceOrderPlugin()//,
-    //new webpack.HotModuleReplacementPlugin(),
-    //new webpack.NoErrorsPlugin()
+    new webpack.optimize.OccurrenceOrderPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoErrorsPlugin()
   ],
   resolve: {
     alias: {
@@ -60,9 +54,10 @@ module.exports = {
   devtool: '#eval-source-map'
 }
 
+// dynamic configuration entries
 if (process.env.NODE_ENV === 'production') {
-  module.exports.devtool = '#source-map'
-    // http://vue-loader.vuejs.org/en/workflow/production.html
+
+  module.exports.devtool = '#source-map';
   module.exports.plugins = (module.exports.plugins || []).concat([
     new webpack.DefinePlugin({
       'process.env': {
@@ -78,5 +73,11 @@ if (process.env.NODE_ENV === 'production') {
     new webpack.LoaderOptionsPlugin({
       minimize: true
     })
-  ])
+  ]);
+} else {
+
+  for (let key of Object.keys(module.exports.entry)) {
+    module.exports.entry[key].push('webpack-hot-middleware/client');
+  }
+
 }

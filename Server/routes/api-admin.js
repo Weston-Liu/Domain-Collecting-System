@@ -193,14 +193,14 @@ router.post('/site', function (req, res) {
  */
 router.get('/site', function (req, res) {
 
-    var sql = "SELECT " +
-        "country.id AS `cid`, " +
-        "country.name AS `country`, " +
-        "site.id AS `sid`, " +
-        "site.name AS `site` " +
-        "FROM `site` " +
-        "INNER JOIN `country` ON site.country = country.id " +
-        "ORDER BY `cid`";
+    var sql = "SELECT \
+        country.id AS `cid`, \
+        country.name AS `country`, \
+        site.id AS `sid`, \
+        site.name AS `site` \
+        FROM `site` \
+        INNER JOIN `country` ON site.country = country.id \
+        ORDER BY `cid`";
 
     DB.connection.query(sql, (err, results, fields) => {
         err && console.log(err);

@@ -8,17 +8,8 @@ const MySQLStore = require('express-mysql-session')(session);
 const bodyParser = require('body-parser');
 const minifyHTML = require('express-minify-html');
 
-// dev-use-only
-if (process.env.NODE_ENV !== 'production') {
-    const webpack = require('webpack');
-    const webpackConfig = require('../webpack.config');
-    const compiler = webpack(webpackConfig);
-    const reload = require('reload');
-    const http = require('http');
-}
-
 // statics
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // views
 app.set('views', path.join(__dirname, 'views'));
@@ -42,15 +33,6 @@ app.use(minifyHTML({
     }
 }));
 
-// dev-use-only
-if (process.env.NODE_ENV !== 'production') {
-    app.use(require("webpack-dev-middleware")(compiler, {
-        noInfo: true,
-        publicPath: webpackConfig.output.publicPath
-    }));
-    app.use(require("webpack-hot-middleware")(compiler));
-}
-
 // session
 app.use(session({
     name: 'passport',
@@ -60,22 +42,35 @@ app.use(session({
     saveUninitialized: true
 }));
 
-
 // routes
 app.use('/', require('./routes/index'));
 app.use('/login', require('./routes/login'));
 app.use('/api', require('./routes/api'));
 
+
 // dev-use-only
 if (process.env.NODE_ENV !== 'production') {
-    var server = http.createServer(app);
-    reload(server, app);
 
+    const webpack = require('webpack');
+    const webpackConfig = require('../webpack.config');
+    const compiler = webpack(webpackConfig);
+    const reload = require('reload');
+    const http = require('http');
+
+    app.use(require("webpack-dev-middleware")(compiler, {
+        noInfo: true,
+        publicPath: webpackConfig.output.publicPath
+    }));
+    app.use(require("webpack-hot-middleware")(compiler));
+
+    const server = http.createServer(app);
+    reload(server, app);
     server.listen(8888, function () {
         console.log('App (dev) is now running on port 8888!');
     });
+
 } else {
-    var server = app.listen(8888, function () {
+    const server = app.listen(8888, function () {
         console.log(`Now the app is listening at port ${server.address().port}`);
     });
 }
