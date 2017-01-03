@@ -8,7 +8,7 @@ module.exports = {
     login: ['./client/login/main.js', 'webpack-hot-middleware/client']
   },
   output: {
-    filename: './[name].js',
+    filename: './[name].js?[hash]',
     path: path.resolve(__dirname, './server/public/'),
     publicPath: '/'
   },
@@ -37,16 +37,13 @@ module.exports = {
       loader: 'file-loader'
     }, {
       test: /\.(png|jpg|gif|svg)$/,
-      loader: 'file-loader',
-      options: {
-        name: '[name].[ext]?[hash]'
-      }
+      loader: 'file-loader'
     }]
   },
   plugins: [
-    new webpack.optimize.OccurrenceOrderPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
+    new webpack.optimize.OccurrenceOrderPlugin()//,
+    //new webpack.HotModuleReplacementPlugin(),
+    //new webpack.NoErrorsPlugin()
   ],
   resolve: {
     alias: {
