@@ -12,25 +12,20 @@
       <span>Country</span>
       <el-button type="warning" icon="edit" size="mini"></el-button>
       <div id="countries">
-
-        <template v-for="country of sites">
-          <label class="custom-control custom-checkbox">
-              <input type="checkbox" v-model="countryChecked" :value="country.id" class="custom-control-input">
-              <span class="custom-control-indicator"></span>
-              <span class="custom-control-description">{{ country.name }}</span>
-          </label>
+        <template>
+          <el-checkbox-group v-model="countryChecked">
+            <el-checkbox :label="country.id" v-for="country of sites">{{ country.name }}</el-checkbox>
+          </el-checkbox-group>
         </template>
       </div>
       <template v-for="country of sites">
         <div v-if="countryChecked.indexOf(country.id) !== -1" class="sites">
           <el-tag class="cname" type="success" color="#e7faf0">{{ country.name }}<i class="el-icon-edit cname-modifier" @click="editSites(country.id)"></i></el-tag>
           <div>
-            <template v-for="site of country.sites">
-              <label class="custom-control custom-checkbox">
-                <input type="checkbox" v-model="siteChecked" :value="site.id" class="custom-control-input">
-                <span class="custom-control-indicator"></span>
-                <span class="custom-control-description">{{ site.name }}</span>
-              </label>
+            <template>
+              <el-checkbox-group v-model="siteChecked">
+                <el-checkbox :label="site.id" v-for="site of country.sites">{{ site.name }}</el-checkbox>
+              </el-checkbox-group>
             </template>
           </div>
         </div>
@@ -112,7 +107,7 @@
     },
     methods: {
       // category
-      editSites: function(e){
+      editSites: function (e) {
         console.log(e);
       },
 
@@ -208,7 +203,7 @@
     }
   }
 </script>
-<style>
+<style>  
   .el-row {
     margin-top: 1em
   }
@@ -217,7 +212,7 @@
     margin-right: 2em
   }
   
-  .custom-control+.custom-control {
+  .el-checkbox+.el-checkbox {
     margin-left: 0 !important
   }
   
@@ -230,10 +225,6 @@
     float: right;
     position: relative;
     top: -2.3em;
-  }
-  
-  .col-lg-6 {
-    margin-bottom: 1em;
   }
   
   .el-date-editor {
@@ -252,15 +243,15 @@
   }
   
   #countries {
-    margin-top: 0.5em
+    margin: 0.5em 0
   }
   
   .cname-modifier {
     margin-left: 0.5em
   }
-
+  
   .cname-modifier:hover {
-    color:#087b3b;
+    color: #087b3b;
     cursor: pointer
   }
 </style>

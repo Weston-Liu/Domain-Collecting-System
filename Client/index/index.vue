@@ -10,14 +10,11 @@
         <h1>Domain Collecting System</h1>
         <h4>Country: {{ country }}
         </h4>
-        <label>Select Site</label>
-        <div class="unselectable">
-            <template v-for="site of sites">
-                <label class="custom-control custom-checkbox">
-                    <input type="checkbox" v-model="checked" :value="site.id" class="custom-control-input">
-                    <span class="custom-control-indicator"></span>
-                    <span class="custom-control-description">{{ site.name }}</span>
-                </label>
+        <div class="unselectable" id="sites">
+            <template>
+                <el-checkbox-group v-model="checked">
+                    <el-checkbox :label="site.id" v-for="site of sites">{{ site.name }}</el-checkbox>
+                </el-checkbox-group>
             </template>
         </div>
         <domain-list :domains="paginatedDomain"></domain-list>
@@ -35,7 +32,7 @@
                     <el-input placeholder="Input domain..." v-model="input">
                         <el-button @click="add" :disabled="hasDanger" slot="append" icon="upload2">Add</el-button>
                     </el-input>
-                    <small class="form-text text-muted">You can use comma to seperate mutiple domains.</small>
+                    <small class="text-muted">You can use comma to seperate mutiple domains.</small>
                     <div v-if="warnInfo" class="warn"><i class="el-icon-warning"></i>{{ warnInfo }}</div>
                     <div v-if="errorInfo" class="error"><i class="el-icon-circle-cross"></i>{{ errorInfo }}</div>
                 </el-col>
@@ -241,16 +238,20 @@
         color: #FF4949
     }
     
-    .custom-control+.custom-control {
+    .el-checkbox+.el-checkbox {
         margin-left: 0 !important
-    }
-    
-    .col-lg-6 {
-        margin-bottom: 1em;
     }
     
     .el-pagination {
         text-align: center;
         margin: 1em 0 1em 0;
+    }
+    
+    #sites {
+        margin: 1em 0
+    }
+    
+    .text-muted {
+        color: #888
     }
 </style>

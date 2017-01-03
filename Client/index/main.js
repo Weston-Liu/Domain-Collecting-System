@@ -1,16 +1,12 @@
 import Vue from 'vue'
 import app from './index.vue'
 
-require('../assets/bootstrap.min.css')
-
 import 'element-ui/lib/theme-default/index.css'
 import '../assets/common.css'
 
 import ElementUI from 'element-ui'
 import lang from 'element-ui/lib/locale/lang/en'
 import locale from 'element-ui/lib/locale'
-
-
 
 locale.use(lang)
 Vue.use(ElementUI);
