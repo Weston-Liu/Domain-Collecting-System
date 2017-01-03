@@ -7,9 +7,28 @@ const session = require('express-session')
 const MySQLStore = require('express-mysql-session')(session);
 const bodyParser = require('body-parser');
 const minifyHTML = require('express-minify-html');
+const compression = require('compression')
 
-// statics
-app.use(express.static(path.join(__dirname, 'public')));
+
+// dev-use-only
+if (process.env.NODE_ENV !== 'production') {
+
+    var webpack = require('webpack');
+    var webpackConfig = require('../webpack.config');
+    var compiler = webpack(webpackConfig);
+    var reload = require('reload');
+    var http = require('http');
+
+    app.use(require("webpack-dev-middleware")(compiler, {
+        noInfo: true,
+        publicPath: webpackConfig.output.publicPath
+    }));
+    app.use(require("webpack-hot-middleware")(compiler));
+} else {
+
+    // statics
+    app.use(express.static(path.join(__dirname, 'public')));
+}
 
 // views
 app.set('views', path.join(__dirname, 'views'));
@@ -32,6 +51,8 @@ app.use(minifyHTML({
         minifyJS: true
     }
 }));
+app.use(compression());
+
 
 // session
 app.use(session({
@@ -51,19 +72,7 @@ app.use('/api', require('./routes/api'));
 // dev-use-only
 if (process.env.NODE_ENV !== 'production') {
 
-    const webpack = require('webpack');
-    const webpackConfig = require('../webpack.config');
-    const compiler = webpack(webpackConfig);
-    const reload = require('reload');
-    const http = require('http');
-
-    app.use(require("webpack-dev-middleware")(compiler, {
-        noInfo: true,
-        publicPath: webpackConfig.output.publicPath
-    }));
-    app.use(require("webpack-hot-middleware")(compiler));
-
-    const server = http.createServer(app);
+    var server = http.createServer(app);
     reload(server, app);
     server.listen(8888, function () {
         console.log('App (dev) is now running on port 8888!');

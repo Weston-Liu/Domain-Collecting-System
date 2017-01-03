@@ -3,13 +3,13 @@ var webpack = require('webpack')
 
 module.exports = {
   entry: {
-    index: ['./client/index/main.js'],
-    admin: ['./client/admin/main.js'],
-    login: ['./client/login/main.js']
+    index: ['./client/index/main.js','webpack-hot-middleware/client'],
+    admin: ['./client/admin/main.js','webpack-hot-middleware/client'],
+    login: ['./client/login/main.js','webpack-hot-middleware/client']
   },
   output: {
-    filename: './[name].js?[hash]',
-    path: path.resolve(__dirname, './server/public/'),
+    filename: './[name].js',
+    path: path.resolve(__dirname, '/server/public/'),
     publicPath: '/'
   },
   module: {
@@ -77,7 +77,6 @@ if (process.env.NODE_ENV === 'production') {
 } else {
 
   for (let key of Object.keys(module.exports.entry)) {
-    module.exports.entry[key].push('webpack-hot-middleware/client');
+  //  module.exports.entry[key].push('webpack-hot-middleware/client');
   }
-
 }

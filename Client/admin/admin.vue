@@ -12,6 +12,7 @@
       <span>Country</span>
       <el-button type="warning" icon="edit" size="mini"></el-button>
       <div id="countries">
+
         <template v-for="country of sites">
           <label class="custom-control custom-checkbox">
               <input type="checkbox" v-model="countryChecked" :value="country.id" class="custom-control-input">
