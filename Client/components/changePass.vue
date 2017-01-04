@@ -1,5 +1,5 @@
 <template>
-    <el-dialog class="unselectable" title="Change Password" v-model="visible" :show-close="false" :close-on-click-modal="false">
+    <el-dialog class="unselectable" title="Change Password" v-model="visible" :show-close="false" size="small" :close-on-press-escape="false" :close-on-click-modal="false" :lock-scroll="false">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
             <el-form-item label="Original Password" prop="op">
                 <el-input v-model="ruleForm.op" auto-complete="off"></el-input>
@@ -60,7 +60,7 @@
             close: function () {
                 this.$emit('cpclosed');
             },
-            submit: function (ev) {
+            submit: function () {
                 this.$refs.ruleForm.validate((valid) => {
                     if (valid) {
                         // fetch
@@ -73,11 +73,14 @@
                             body: JSON.stringify(this.ruleForm)
                         }).then(res => {
                             if (res.ok) {
-                                console.log('ok');
+                                this.$message.success('Password changed successfully.');
+                                this.$emit('cpclosed');
                             } else {
-                                console.log('err');
+                                this.$message.error('The old password is wrong, please check your input.');
                             }
-                        }).catch(() => {});
+                        }).catch(() => {
+                            this.$message.error('Network error, please try again later.')
+                        });
 
                     }
                 });

@@ -153,7 +153,7 @@ router.post('/login', function (req, res) {
         .then(authorition, console.error)
         .then(() => {
             res.redirect('/');
-        }, (err) => {
+        }, err => {
             console.error(err);
             res.redirect('/login');
         })

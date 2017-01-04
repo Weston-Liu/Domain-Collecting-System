@@ -42,8 +42,8 @@
     </div>
 </template>
 <script>
-    import table from '../components/table.vue'
-    import dialog from '../components/changePass.vue'
+    import domainList from '../components/domainList.vue'
+    import changePass from '../components/changePass.vue'
     export default {
         name: 'app',
         data() {
@@ -218,8 +218,8 @@
             });
         },
         components: {
-            'domain-list': table,
-            'change-pass': dialog
+            'domain-list': domainList,
+            'change-pass': changePass
         }
     }
 </script>

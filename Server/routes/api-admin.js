@@ -114,34 +114,34 @@ router.put('/site', function (req, res) {
 /*********************************************************************************************************/
 
 /**
- * @param: country <int>
- * @returns: {success: <boolean>}
+ * @param: id <int>
+ * @returns: 200 / 500
  */
 router.delete('/country', function (req, res) {
     var sql = "DELETE FROM `country` WHERE `id` = ?";
-    var params = [req.query.country];
+    var params = [req.body.id];
 
     DB.connection.query(sql, params, (err, results, fields) => {
-        err && console.log(err);
-        res.json({
-            success: !err
-        });
+        if (err)
+            console.log(err);
+        else
+            res.sendStatus(200);
     });
 });
 
 /**
- * @param: site <int>
- * @returns: {success: <boolean>}
+ * @param: id <int>
+ * @returns: 200 / 500
  */
-router.delete('/country', function (req, res) {
+router.delete('/site', function (req, res) {
     var sql = "DELETE FROM `site` WHERE `id` = ?";
-    var params = [req.query.site];
+    var params = [req.body.id];
 
     DB.connection.query(sql, params, (err, results, fields) => {
-        err && console.log(err);
-        res.json({
-            success: !err
-        });
+        if (err)
+            console.log(err);
+        else
+            res.sendStatus(200);
     });
 });
 
@@ -152,33 +152,33 @@ router.delete('/country', function (req, res) {
 
 /**
  * @param: id <int>, name <string>
- * @returns: {success: <boolean>}
+ * @returns: 200 / 500
  */
 router.post('/country', function (req, res) {
     var sql = "UPDATE `country` SET `name` = ? WHERE `id` = ?";
-    var params = [req.query.name, req.query.id];
+    var params = [req.body.name, req.body.id];
 
     DB.connection.query(sql, params, (err, results, fields) => {
-        err && console.log(err);
-        res.json({
-            success: !err
-        });
+        if (err)
+            console.log(err);
+        else
+            res.sendStatus(200);
     });
 });
 
 /**
  * @param: id <int>, name <string>
- * @returns: {success: <boolean>}
+ * @returns: 200 / 500
  */
 router.post('/site', function (req, res) {
     var sql = "UPDATE `site` SET `name` = ? WHERE `id` = ?";
-    var params = [req.query.name, req.query.id];
+    var params = [req.body.name, req.body.id];
 
     DB.connection.query(sql, params, (err, results, fields) => {
-        err && console.log(err);
-        res.json({
-            success: !err
-        });
+        if (err)
+            console.log(err);
+        else
+            res.sendStatus(200);
     });
 });
 

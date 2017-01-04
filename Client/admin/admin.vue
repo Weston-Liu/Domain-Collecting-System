@@ -8,60 +8,67 @@
       <a href="api/public/logout" class="link">Logout</a>
     </div>
     <h1>Domain Collecting System</h1>
-    <div class="unselectable">
-      <span>Country</span>
-      <el-button type="warning" icon="edit" size="mini"></el-button>
-      <div id="countries">
-        <template>
-          <el-checkbox-group v-model="countryChecked">
-            <el-checkbox :label="country.id" v-for="country of sites">{{ country.name }}</el-checkbox>
-          </el-checkbox-group>
-        </template>
-      </div>
-      <template v-for="country of sites">
-        <div v-if="countryChecked.indexOf(country.id) !== -1" class="sites">
-          <el-tag class="cname" type="success" color="#e7faf0">{{ country.name }}<i class="el-icon-edit cname-modifier" @click="editSites(country.id)"></i></el-tag>
-          <div>
+    <el-tabs type="border-card" class="unselectable">
+      <el-tab-pane label="Domain">
+        <div>
+          <span>Country</span>
+          <div id="countries">
             <template>
-              <el-checkbox-group v-model="siteChecked">
-                <el-checkbox :label="site.id" v-for="site of country.sites">{{ site.name }}</el-checkbox>
+              <el-checkbox-group v-model="countryChecked">
+                <el-checkbox :label="country.id" v-for="country of sites">{{ country.name }}</el-checkbox>
               </el-checkbox-group>
             </template>
           </div>
+          <template v-for="country of sites">
+            <div v-if="countryChecked.indexOf(country.id) !== -1" class="sites">
+              <el-tag class="cname" type="success" color="#e7faf0" close-transition>{{ country.name }}</el-tag>
+              <div>
+                <template>
+                  <el-checkbox-group v-model="siteChecked">
+                    <el-checkbox :label="site.id" v-for="site of country.sites">{{ site.name }}</el-checkbox>
+                  </el-checkbox-group>
+                </template>
+              </div>
+            </div>
+          </template>
         </div>
-      </template>
-    </div>
-    <domain-list :domains="paginatedDomain"></domain-list>
-    <template>
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes"
-        :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="filteredDomain.length">
-      </el-pagination>
-    </template>
-    <template>
-      <el-row type="flex" class="row-bg" justify="space-between">
-        <el-col :span="12">
-          <el-button @click="download" type="info">Download</el-button>
-        </el-col>
-        <el-col :span="8">
-          <el-date-picker v-model="dateRange" type="daterange" align="right" placeholder="Choose Date Range" :picker-options="pickerOptions">
-          </el-date-picker>
-        </el-col>
-      </el-row>
-    </template>
-    <change-pass :visible="changePassVisible" v-on:cpclosed="changePassClose"></change-pass>
+        <domain-list :domains="paginatedDomain"></domain-list>
+        <template>
+          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes"
+            :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="filteredDomain.length">
+          </el-pagination>
+        </template>
+        <template>
+          <el-row type="flex" class="row-bg" justify="space-between">
+            <el-col :span="12">
+              <el-button @click="download" type="info">Download</el-button>
+            </el-col>
+            <el-col :span="8">
+              <el-date-picker v-model="dateRange" type="daterange" align="right" placeholder="Choose Date Range" :picker-options="pickerOptions">
+              </el-date-picker>
+            </el-col>
+          </el-row>
+        </template>
+      </el-tab-pane>
+      <el-tab-pane label="Category">
+        <edit-site :country="sites" v-on:refsite="refreshSite"></edit-site>
+      </el-tab-pane>
+      <el-tab-pane label="User"></el-tab-pane>
+    </el-tabs>
+    <change-pass :visible="changePass_visible" v-on:cpclosed="changePassClose"></change-pass>
   </div>
 </template>
 <script>
-  import table from '../components/table.vue'
-  import dialog from '../components/changePass.vue'
+  import domainList from '../components/domainList.vue'
+  import changePass from '../components/changePass.vue'
+  import editSite from '../components/editSite.vue'
 
   export default {
     name: 'app',
 
-    //mixins: [dialog],
-
     data() {
       return {
+
         // pagination
         currentPage: 1,
         pageSize: 10,
@@ -74,8 +81,8 @@
         // date picker
         dateRange: [],
         // change pass dialog
-        changePassVisible: false,
-
+        changePass_visible: false,
+        // date picker
         pickerOptions: {
           shortcuts: [{
             text: 'Last Week',
@@ -106,10 +113,6 @@
       }
     },
     methods: {
-      // category
-      editSites: function (e) {
-        console.log(e);
-      },
 
       // pagination
       handleSizeChange: function (val) {
@@ -139,11 +142,26 @@
       },
       // change pass
       changePassShow: function () {
-        this.changePassVisible = true;
+        this.changePass_visible = true
       },
       changePassClose: function () {
-        this.changePassVisible = false;
+        this.changePass_visible = false
+      },
+
+      // custom envent handler
+      refreshSite: function(){
+              // fetch site data
+      fetch('api/admin/site', {
+        credentials: 'include'
+      }).then(res => {
+        return res.json().then(json => {
+          this.sites = json;
+        });
+      }).catch(() => {
+        this.$message.error('Network error, please try again later.')
+      });
       }
+
     },
     computed: {
 
@@ -181,6 +199,8 @@
             }
           }
         });
+      }).catch(() => {
+        this.$message.error('Network error, please try again later.')
       });
 
       // fetch domain data
@@ -195,15 +215,18 @@
           if (json.length > 0)
             this.dateRange = [new Date(json[0].cTime), new Date(json[json.length - 1].cTime)];
         });
+      }).catch(()=>{
+        this.$message.error('Network error, please try again later.')
       });
     },
     components: {
-      'domain-list': table,
-      'change-pass': dialog
+      'domain-list': domainList,
+      'change-pass': changePass,
+      'edit-site': editSite
     }
   }
 </script>
-<style>  
+<style>
   .el-row {
     margin-top: 1em
   }
@@ -253,5 +276,9 @@
   .cname-modifier:hover {
     color: #087b3b;
     cursor: pointer
+  }
+  
+  .el-tabs--border-card {
+    box-shadow: none !important
   }
 </style>
