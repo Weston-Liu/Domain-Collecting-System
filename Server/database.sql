@@ -47,8 +47,9 @@ DROP TABLE IF EXISTS `site`;
 		
 CREATE TABLE `site` (
   `id` INTEGER(11) NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(255) NOT NULL,
+  `name` VARCHAR(40) NOT NULL,
   `country` INTEGER(11) NOT NULL,
+  UNIQUE(`name`, `country`),
   PRIMARY KEY (`id`)
 );
 
@@ -61,7 +62,8 @@ DROP TABLE IF EXISTS `country`;
 		
 CREATE TABLE `country` (
   `id` INTEGER(11) NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(255) NOT NULL,
+  `name` VARCHAR(40) NOT NULL,
+  UNIQUE (`name`),
   PRIMARY KEY (`id`)
 );
 

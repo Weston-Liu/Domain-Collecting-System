@@ -149,17 +149,17 @@
       },
 
       // custom envent handler
-      refreshSite: function(){
-              // fetch site data
-      fetch('api/admin/site', {
-        credentials: 'include'
-      }).then(res => {
-        return res.json().then(json => {
-          this.sites = json;
+      refreshSite: function () {
+        // fetch site data
+        fetch('api/admin/site', {
+          credentials: 'include'
+        }).then(res => {
+          return res.json().then(json => {
+            this.sites = json;
+          });
+        }).catch(() => {
+          this.$message.error('Network error, please try again later.')
         });
-      }).catch(() => {
-        this.$message.error('Network error, please try again later.')
-      });
       }
 
     },
@@ -190,10 +190,10 @@
       }).then(res => {
         return res.json().then(json => {
           this.sites = json;
-          /* Select All Countries*/
+          /* Select All Countries */
           for (let entry of json) {
             this.countryChecked.push(entry.id);
-            /* Select All Sites*/
+            /* Select All Sites */
             for (let site of entry.sites) {
               this.siteChecked.push(site.id);
             }
@@ -215,7 +215,7 @@
           if (json.length > 0)
             this.dateRange = [new Date(json[0].cTime), new Date(json[json.length - 1].cTime)];
         });
-      }).catch(()=>{
+      }).catch(() => {
         this.$message.error('Network error, please try again later.')
       });
     },
@@ -257,12 +257,6 @@
   .el-pagination {
     text-align: center;
     margin-top: 1em;
-  }
-  
-  .el-button--mini {
-    float: right;
-    padding: 5px !important;
-    font-size: 2px !important;
   }
   
   #countries {
