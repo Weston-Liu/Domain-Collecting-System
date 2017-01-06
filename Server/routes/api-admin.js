@@ -40,34 +40,28 @@ router.get('/domain', function (req, res) {
 /*********************************************************************************************************/
 
 /**
- * @param: country <string>
- * @returns: {success: <boolean>, (id: <int>)}
+ * @param: name <string>
+ * @returns: 200 / 500
  */
 router.put('/country', function (req, res) {
-
-    console.log(`Adding site [${req.query.country}]...`);
     var sql = "INSERT INTO `country` (`name`) VALUES (?)";
-    var params = [req.query.country];
+    var params = [req.body.name];
 
     DB.connection.query(sql, params, (err, results, fields) => {
-        var ret = {
-            success: !err
-        };
         if (err) {
             console.log(err);
-        } else {
-            ret['id'] = results.insertId;
-        }
-        res.json(ret);
+            res.sendStatus(500);
+        } else
+            res.sendStatus(200);
     });
 });
 /**
- * @param: country <int>, site <string>
+ * @param: country <int>, name <string>
  * @returns: 200 / 500
  */
 router.put('/site', function (req, res) {
     var sql = "INSERT INTO `site` (`name`, `country`) VALUES (?,?)";
-    var params = [req.body.site, req.body.country];
+    var params = [req.body.name, req.body.country];
 
     DB.connection.query(sql, params, (err, results, fields) => {
         if (err) {

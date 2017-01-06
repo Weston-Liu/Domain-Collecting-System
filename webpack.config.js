@@ -76,7 +76,8 @@ if (process.env.NODE_ENV === 'production') {
   ]);
 } else {
 
-  for (let key of Object.keys(module.exports.entry)) {
+  var collect = Object.keys(module.exports.entry);
+  for (let key of collect) {
     module.exports.entry[key].push('webpack-hot-middleware/client');
   }
 }
