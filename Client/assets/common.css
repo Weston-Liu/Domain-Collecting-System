@@ -2,10 +2,11 @@
     font-family: 'Avenir', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    user-select: none;
 }
 
-.unselectable {
-    user-select: none;
+input{
+     user-select: initial
 }
 
 .container {

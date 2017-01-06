@@ -10,27 +10,27 @@
         <h1>Domain Collecting System</h1>
         <h4>Country: {{ country }}
         </h4>
-        <div class="unselectable" id="sites">
+        <div id="sites">
             <template>
                 <el-checkbox-group v-model="checked">
                     <el-checkbox :label="site.id" v-for="site of sites">{{ site.name }}</el-checkbox>
                 </el-checkbox-group>
             </template>
-        </div>
-        <el-input placeholder="Input domain..." v-model="input">
-            <el-button @click="add" :disabled="hasDanger" slot="append" icon="upload2">Add</el-button>
-        </el-input>
-        <small>You can use comma to seperate mutiple domains.</small>
-        <div v-if="warnInfo" class="warn"><i class="el-icon-warning"></i>{{ warnInfo }}</div>
-        <div v-if="errorInfo" class="error"><i class="el-icon-circle-cross"></i>{{ errorInfo }}</div>
-        <domain-list :domains="paginatedDomain"></domain-list>
-        <template>
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes"
-                :page-size="pageSize" layout="sizes, prev, pager, next" :total="filteredDomain.length">
-            </el-pagination>
-        </template>
-        <el-button @click="download" type="info">Download</el-button>
-        <change-pass :visible="changePassVisible" v-on:cpclosed="changePassClose"></change-pass>
+    </div>
+    <el-input placeholder="Input domain..." v-model="input">
+        <el-button @click="add" :disabled="hasDanger" slot="append" icon="upload2">Add</el-button>
+    </el-input>
+    <small>You can use comma to seperate mutiple domains.</small>
+    <div v-if="warnInfo" class="warn"><i class="el-icon-warning"></i>{{ warnInfo }}</div>
+    <div v-if="errorInfo" class="error"><i class="el-icon-circle-cross"></i>{{ errorInfo }}</div>
+    <domain-list class="domainList" :domains="paginatedDomain"></domain-list>
+    <template>
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes"
+            :page-size="pageSize" layout="sizes, prev, pager, next" :total="filteredDomain.length">
+        </el-pagination>
+    </template>
+    <el-button @click="download" type="info">Download</el-button>
+    <change-pass :visible="changePassVisible" v-on:cpclosed="changePassClose"></change-pass>
     </div>
 </template>
 <script>
@@ -226,8 +226,7 @@
     
     .error {
         font-size: 14px;
-        color: #FF4949;
-        margin-bottom: 1em
+        color: #FF4949
     }
     
     .el-checkbox+.el-checkbox {
@@ -236,10 +235,14 @@
     
     .el-pagination {
         text-align: center;
-        margin: 1em 0 1em 0;
+        margin: 1em 0 1em 0
     }
     
     #sites {
         margin: 1em 0
+    }
+    
+    .domainList {
+        margin-top: 1em
     }
 </style>

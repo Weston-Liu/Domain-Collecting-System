@@ -8,7 +8,7 @@
       <a href="api/public/logout" class="link">Logout</a>
     </div>
     <h1>Domain Collecting System</h1>
-    <el-tabs type="border-card" class="unselectable">
+    <el-tabs type="border-card">
       <el-tab-pane label="Domain">
         <div>
           <div class="bold">Country</div>

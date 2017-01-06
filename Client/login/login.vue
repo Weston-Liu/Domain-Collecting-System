@@ -26,13 +26,11 @@
                 this.$notify.error({
                     title: 'Shame!!!',
                     message: 'How dare you forget your password!!!',
-                    duration: 3000,
-                    customClass: 'unselectable'
+                    duration: 3000
                 });
                 this.$message.error({
                     message: 'What a Shame!!!',
-                    duration: 3000,
-                    customClass: 'unselectable'
+                    duration: 3000
                 });
             }
         }
