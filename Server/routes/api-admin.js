@@ -15,6 +15,7 @@ router.get('/domain', function (req, res) {
     var sql = "SELECT \
         site.id AS sid, \
         site.name AS site, \
+        data.id AS id, \
         data.domain AS domain, \
         data.createTime AS cTime, \
         data.viewTime AS vTime, \
@@ -34,6 +35,39 @@ router.get('/domain', function (req, res) {
     });
 });
 
+
+/*********************************************************************************************************/
+//                                          Domain UPDATE
+/*********************************************************************************************************/
+
+/**
+ * @returns: 200 / 500
+ */
+router.post('/domain', function (req, res) {
+
+    var date = new Date();
+    var ds = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+
+    var sql = "UPDATE `data` SET `viewTime` = ? WHERE `id` IN ";
+
+    var plain = [];
+    var params = [ds];
+
+    for (let id of req.body) {
+        plain.push('?');
+        params.push(id)
+    }
+    sql += `(${plain.join(',')})`;
+
+
+    DB.connection.query(sql, params, (err, results, fields) => {
+        if (err) {
+            console.log(err);
+            res.sendStatus(500);
+        } else
+            res.json(results);
+    });
+});
 
 /*********************************************************************************************************/
 //                                          Category ADD
@@ -264,8 +298,9 @@ router.delete('/user', function (req, res) {
         if (err) {
             console.log(err);
             res.sendStatus(500);
-        } else
+        } else {
             res.sendStatus(200);
+        }
     });
 });
 

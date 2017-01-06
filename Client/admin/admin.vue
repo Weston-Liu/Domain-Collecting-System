@@ -129,9 +129,11 @@
       // domain list
       download: function () {
         var ret = 'Site-ID,domain,unitType\n';
+        var ids = [];
 
         for (let entry of this.filteredDomain) {
-          ret += `${entry.site},${entry.domain},b2cUnit\n`;
+          ret += `${entry.site},${entry.domain.indexOf('@') === -1 ? '*' + entry.domain: entry.domain},b2cUnit\n`;
+          ids.push(entry.id);
         }
 
         var blob = new Blob([ret], {
@@ -143,6 +145,22 @@
         link.download = 'Domains.csv';
         link.click();
         URL.revokeObjectURL(link.href);
+
+        fetch('api/admin/domain', {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(ids)
+        }).then(res => {
+          return res.json().then(json => {
+            this.sites = json;
+            localStorage.sites = JSON.stringify(json);
+          });
+        }).catch(() => {
+          this.$message.error('Network error, please try again later.')
+        });
 
       },
       // change pass
@@ -234,8 +252,27 @@
             entry.status = (entry.cTime === entry.vTime ? 'New Request' : 'Viewed');
           }
           this.domains = json;
-          if (json.length > 0)
-            this.dateRange = [new Date(json[0].cTime), new Date(json[json.length - 1].cTime)];
+
+
+
+          if (json.length > 0) {
+
+            var start = new Date(json[0].cTime);
+            var end = new Date(json[json.length - 1].cTime);
+
+            start.setHours(0);
+            start.setMinutes(0);
+            start.setSeconds(0);
+            start.setMilliseconds(0)
+
+            end.setHours(24);
+            end.setMinutes(0);
+            end.setSeconds(0);
+            end.setMilliseconds(0)
+
+            this.dateRange = [start, end];
+
+          }
         });
       }).catch(() => {
         this.$message.error('Network error, please try again later.')

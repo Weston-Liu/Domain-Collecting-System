@@ -120,7 +120,7 @@
                                 return res.json().then((json) => {
                                     for (let entry of json) {
                                         entry.status = (entry.cTime === entry.vTime ?
-                                            'Pending' : 'Viewed');
+                                            'New Request' : 'Viewed');
                                     }
                                     this.domains = json;
                                 });
@@ -202,7 +202,7 @@
             }).then((res) => {
                 return res.json().then((json) => {
                     for (let entry of json) {
-                        entry.status = (entry.cTime === entry.vTime ? 'Pending' : 'Viewed');
+                        entry.status = (entry.cTime === entry.vTime ? 'New Request' : 'Viewed');
                     }
                     this.domains = json;
                 });

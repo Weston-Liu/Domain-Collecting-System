@@ -29,7 +29,7 @@ router.get('/info', function (req, res) {
 router.put('/domain', function (req, res) {
 
     var date = new Date();
-    var ds = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+    var ds = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
 
     var sql = 'INSERT INTO `data` (`site`, `domain`, applicant, `createTime`, `viewTime`) VALUES ';
 

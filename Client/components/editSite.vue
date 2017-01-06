@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- Countries -->
-        <el-collapse v-model="expandedTabs">
+        <el-collapse class="countryList" v-model="expandedTabs">
             <el-collapse-item name="country" title="Country">
                 <template slot="title">
                     <span>Country</span>
@@ -224,5 +224,8 @@
     .plus {
         position: absolute;
         right: 2em
+    }
+    .countryList{
+        margin-bottom:1em
     }
 </style>

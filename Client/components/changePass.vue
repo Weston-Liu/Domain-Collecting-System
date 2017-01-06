@@ -75,6 +75,7 @@
                             if (res.ok) {
                                 this.$message.success('Password changed successfully.');
                                 this.$emit('cpclosed');
+                                this.$refs['ruleForm'].resetFields();
                             } else {
                                 this.$message.error('The old password is wrong, please check your input.');
                             }

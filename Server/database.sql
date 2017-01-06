@@ -13,12 +13,14 @@
 DROP TABLE IF EXISTS `data`;
 		
 CREATE TABLE `data` (
+  `id` INTEGER(11) NOT NULL AUTO_INCREMENT,
   `site` INTEGER(11) NOT NULL,
   `domain` VARCHAR(40) NOT NULL,
   `applicant` INTEGER(11) NOT NULL,
   `createTime` DATETIME NOT NULL,
   `viewTime` DATETIME NOT NULL,
-  PRIMARY KEY (`site`,`domain`)
+  UNIQUE (`site`, `domain`),
+  PRIMARY KEY (`id`)
 );
 
 -- ---
@@ -118,5 +120,5 @@ INSERT INTO `site` VALUES ('19', 'twedu_unit','4');
 INSERT INTO `user` (`name`,`password`,`role`,`country`) VALUES ('admin','123','9','1');
 INSERT INTO `user` (`name`,`password`,`role`,`country`) VALUES ('user','321','1','1');
 
-INSERT INTO `data` VALUES ('1', 'qq.com', '2', '2016-12-07 13:18:03', '2016-12-07 13:18:03');
-INSERT INTO `data` VALUES ('2', '163.com', '1', '2016-12-12 13:18:18', '2016-12-19 13:18:23');
+INSERT INTO `data` VALUES ('1', '1', 'qq.com', '2', '2016-12-07 13:18:03', '2016-12-07 13:18:03');
+INSERT INTO `data` VALUES ('2', '2', '163.com', '1', '2016-12-12 13:18:18', '2016-12-19 13:18:23');
