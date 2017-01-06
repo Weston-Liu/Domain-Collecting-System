@@ -29,3 +29,11 @@
 a {
     text-decoration: none
 }
+
+small {
+    color: #888
+}
+
+.bold{
+    font-weight: bold
+}

@@ -5,7 +5,7 @@
             <el-collapse-item name="country" title="Country">
                 <template slot="title">
                     <span>Country</span>
-                    <span style="position: absolute;right:2em">
+                    <span class="plus">
                         <el-button size="mini" type="info" icon="plus" @click.stop="handleAddClick()"></el-button>
                     </span>
                 </template>
@@ -57,10 +57,9 @@
             <el-collapse-item v-for="country of country" :name="country.id + ''">
                 <template slot="title">
                     <span>{{ country.name }}</span>
-                    <span style="position: absolute;right:2em">
-
-          <el-button size="mini" type="info" icon="plus" @click.stop="handleAddClick(country.id)"></el-button>
-      </span>
+                    <span class="plus">
+                        <el-button size="mini" type="info" icon="plus" @click.stop="handleAddClick(country.id)"></el-button>
+                     </span>
                 </template>
                 <el-table :data="country.sites" :show-header="false">
                     <el-table-column>
@@ -220,5 +219,10 @@
     
     .el-collapse-item__content {
         padding: 10px !important
+    }
+    
+    .plus {
+        position: absolute;
+        right: 2em
     }
 </style>

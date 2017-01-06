@@ -17,27 +17,19 @@
                 </el-checkbox-group>
             </template>
         </div>
+        <el-input placeholder="Input domain..." v-model="input">
+            <el-button @click="add" :disabled="hasDanger" slot="append" icon="upload2">Add</el-button>
+        </el-input>
+        <small>You can use comma to seperate mutiple domains.</small>
+        <div v-if="warnInfo" class="warn"><i class="el-icon-warning"></i>{{ warnInfo }}</div>
+        <div v-if="errorInfo" class="error"><i class="el-icon-circle-cross"></i>{{ errorInfo }}</div>
         <domain-list :domains="paginatedDomain"></domain-list>
         <template>
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes"
                 :page-size="pageSize" layout="sizes, prev, pager, next" :total="filteredDomain.length">
             </el-pagination>
         </template>
-        <template>
-            <el-row type="flex" class="row-bg" justify="space-between">
-                <el-col :span="12">
-                    <el-button @click="download" type="info">Download</el-button>
-                </el-col>
-                <el-col :span="12">
-                    <el-input placeholder="Input domain..." v-model="input">
-                        <el-button @click="add" :disabled="hasDanger" slot="append" icon="upload2">Add</el-button>
-                    </el-input>
-                    <small class="text-muted">You can use comma to seperate mutiple domains.</small>
-                    <div v-if="warnInfo" class="warn"><i class="el-icon-warning"></i>{{ warnInfo }}</div>
-                    <div v-if="errorInfo" class="error"><i class="el-icon-circle-cross"></i>{{ errorInfo }}</div>
-                </el-col>
-            </el-row>
-        </template>
+        <el-button @click="download" type="info">Download</el-button>
         <change-pass :visible="changePassVisible" v-on:cpclosed="changePassClose"></change-pass>
     </div>
 </template>
@@ -143,7 +135,6 @@
                         }
                     });
                 }).catch(() => {});
-
             },
             // change pass
             changePassShow: function () {
@@ -177,7 +168,7 @@
             },
             errorInfo: function () {
                 return this.hasDanger ?
-                    (this.checked.length === 0 ? ' Please choose a targeted site.' :
+                    (this.checked.length === 0 ? ' Please choose a site.' :
                         ' Domain format error.') : '';
             },
             validated: function () {
@@ -235,7 +226,8 @@
     
     .error {
         font-size: 14px;
-        color: #FF4949
+        color: #FF4949;
+        margin-bottom: 1em
     }
     
     .el-checkbox+.el-checkbox {
@@ -249,9 +241,5 @@
     
     #sites {
         margin: 1em 0
-    }
-    
-    .text-muted {
-        color: #888
     }
 </style>

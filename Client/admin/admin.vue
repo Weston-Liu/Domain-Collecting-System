@@ -11,7 +11,7 @@
     <el-tabs type="border-card" class="unselectable">
       <el-tab-pane label="Domain">
         <div>
-          <span>Country</span>
+          <div class="bold">Country</div>
           <div id="countries">
             <template>
               <el-checkbox-group v-model="countryChecked">
@@ -53,7 +53,9 @@
       <el-tab-pane label="Category">
         <edit-site :country="sites" v-on:refsite="refreshSite" v-on:ressite="restoreSite"></edit-site>
       </el-tab-pane>
-      <el-tab-pane label="User"></el-tab-pane>
+      <el-tab-pane label="User">
+        <edit-user :user="users" :countries="sites" v-on:refuser="refreshUser"></edit-user>
+      </el-tab-pane>
     </el-tabs>
     <change-pass :visible="changePass_visible" v-on:cpclosed="changePassClose"></change-pass>
   </div>
@@ -62,6 +64,7 @@
   import domainList from '../components/domainList.vue'
   import changePass from '../components/changePass.vue'
   import editSite from '../components/editSite.vue'
+  import userList from '../components/userList.vue'
 
   export default {
     name: 'app',
@@ -73,6 +76,8 @@
         currentPage: 1,
         pageSize: 10,
         pageSizes: [10, 50, 100, 1000],
+        // user list
+        users: [],
         // domain list
         domains: [],
         countryChecked: [],
@@ -162,6 +167,18 @@
           this.$message.error('Network error, please try again later.')
         });
       },
+      refreshUser: function () {
+        fetch('api/admin/user', {
+          credentials: 'include'
+        }).then(res => {
+          return res.json().then(json => {
+            this.users = json;
+            localStorage.users = JSON.stringify(json);
+          });
+        }).catch(() => {
+          this.$message.error('Network error, please try again later.')
+        });
+      },
       restoreSite: function () {
         this.sites = JSON.parse(localStorage.sites);
       }
@@ -214,7 +231,7 @@
       }).then(res => {
         return res.json().then(json => {
           for (let entry of json) {
-            entry.status = (entry.cTime === entry.vTime ? 'Pending' : 'Viewed');
+            entry.status = (entry.cTime === entry.vTime ? 'New Request' : 'Viewed');
           }
           this.domains = json;
           if (json.length > 0)
@@ -223,11 +240,24 @@
       }).catch(() => {
         this.$message.error('Network error, please try again later.')
       });
+
+      // fetch user data
+      fetch('api/admin/user', {
+        credentials: 'include'
+      }).then(res => {
+        return res.json().then(json => {
+          this.users = json;
+          localStorage.users = JSON.stringify(json);
+        });
+      }).catch(() => {
+        this.$message.error('Network error, please try again later.')
+      });
     },
     components: {
       'domain-list': domainList,
       'change-pass': changePass,
-      'edit-site': editSite
+      'edit-site': editSite,
+      'edit-user': userList
     }
   }
 </script>

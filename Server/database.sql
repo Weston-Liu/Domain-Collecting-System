@@ -118,5 +118,5 @@ INSERT INTO `site` VALUES ('19', 'twedu_unit','4');
 INSERT INTO `user` (`name`,`password`,`role`,`country`) VALUES ('admin','123','9','1');
 INSERT INTO `user` (`name`,`password`,`role`,`country`) VALUES ('user','321','1','1');
 
-INSERT INTO `data` VALUES ('1', 'qq.com', '2', '2016-12-07 13:18:03', '2016-12-12 13:18:06');
+INSERT INTO `data` VALUES ('1', 'qq.com', '2', '2016-12-07 13:18:03', '2016-12-07 13:18:03');
 INSERT INTO `data` VALUES ('2', '163.com', '1', '2016-12-12 13:18:18', '2016-12-19 13:18:23');

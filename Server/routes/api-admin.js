@@ -201,22 +201,74 @@ router.get('/site', function (req, res) {
 });
 
 /*********************************************************************************************************/
+//                                          User QUERY
+/*********************************************************************************************************/
+
+/**
+ * @param: name <string>, password <string>, role <int>, country <int>
+ * @returns: 200 / 500
+ */
+router.get('/user', function (req, res) {
+    var sql = "SELECT \
+                user.id AS `id`, \
+                user.name AS `name`, \
+                user.role AS `role`, \
+                country.name AS `country`\
+                FROM `user` \
+                INNER JOIN `country` ON user.country = country.id \
+                ORDER BY role DESC,`id` ASC";
+
+    DB.connection.query(sql, (err, results, fields) => {
+        if (err) {
+            console.log(err);
+            res.sendStatus(500);
+        } else
+            res.json(results);
+    });
+});
+
+/*********************************************************************************************************/
 //                                          User ADD
 /*********************************************************************************************************/
 
 /**
  * @param: name <string>, password <string>, role <int>, country <int>
- * @returns: 200 / 304
+ * @returns: 200 / 500
  */
 router.put('/user', function (req, res) {
-    var sql = "INSERT INTO `user` (`name`, `password`, `role`, `country`) VALUES (?, ?, ?, ?)";
-    var params = [req.query.name, req.query.password, req.query.role, req.query.country];
+    var sql = "INSERT INTO `user` (`name`, `role`, `country`) VALUES (?, ?, ?)";
+    var params = [req.body.name, req.body.role, req.body.country];
 
     DB.connection.query(sql, params, (err, results, fields) => {
-        err && console.log(err);
-        res.send(err ? 304 : 200);
+        if (err) {
+            console.log(err);
+            res.sendStatus(500);
+        } else
+            res.sendStatus(200);
     });
 });
+
+/*********************************************************************************************************/
+//                                          User DELETE
+/*********************************************************************************************************/
+
+/**
+ * @param: id <int>
+ * @returns: 200 / 500
+ */
+router.delete('/user', function (req, res) {
+    var sql = "DELETE FROM `user` WHERE `id` = ?";
+    var params = [req.body.id];
+
+    DB.connection.query(sql, params, (err, results, fields) => {
+        if (err) {
+            console.log(err);
+            res.sendStatus(500);
+        } else
+            res.sendStatus(200);
+    });
+});
+
 
 
 module.exports = router;
