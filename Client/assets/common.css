@@ -32,6 +32,8 @@ a {
 }
 
 small {
+    display: block;
+    margin: 2px 0;
     color: #888
 }
 

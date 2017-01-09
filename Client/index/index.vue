@@ -16,21 +16,21 @@
                     <el-checkbox :label="site.id" v-for="site of sites">{{ site.name }}</el-checkbox>
                 </el-checkbox-group>
             </template>
-    </div>
-    <el-input placeholder="Input domain..." v-model="input">
-        <el-button @click="add" :disabled="hasDanger" slot="append" icon="upload2">Add</el-button>
-    </el-input>
-    <small>You can use comma to seperate mutiple domains.</small>
-    <div v-if="warnInfo" class="warn"><i class="el-icon-warning"></i>{{ warnInfo }}</div>
-    <div v-if="errorInfo" class="error"><i class="el-icon-circle-cross"></i>{{ errorInfo }}</div>
-    <domain-list class="domainList" :domains="paginatedDomain"></domain-list>
-    <template>
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes"
-            :page-size="pageSize" layout="sizes, prev, pager, next" :total="filteredDomain.length">
-        </el-pagination>
-    </template>
-    <el-button @click="download" type="info">Download</el-button>
-    <change-pass :visible="changePassVisible" v-on:cpclosed="changePassClose"></change-pass>
+        </div>
+        <el-input placeholder="Input domain..." v-model="input">
+            <el-button @click="add" :disabled="hasDanger" slot="append" icon="upload2">Add</el-button>
+        </el-input>
+        <small>You can use comma to seperate mutiple domains.</small>
+        <div v-if="warnInfo" class="warn"><i class="el-icon-warning"></i>{{ warnInfo }}</div>
+        <div v-if="errorInfo" class="error"><i class="el-icon-circle-cross"></i>{{ errorInfo }}</div>
+        <domain-list class="domainList" :domains="paginatedDomain"></domain-list>
+        <template>
+            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes"
+                :page-size="pageSize" layout="sizes, prev, pager, next" :total="filteredDomain.length">
+            </el-pagination>
+        </template>
+        <el-button @click="download" type="info">Download</el-button>
+        <change-pass :visible="changePassVisible" v-on:cpclosed="changePassClose"></change-pass>
     </div>
 </template>
 <script>
@@ -108,11 +108,7 @@
                     }).then((res) => {
                         if (res.status === 200) {
                             // show success msg
-                            this.$message({
-                                type: 'success',
-                                message: 'Success.',
-                                duration: 4000
-                            });
+                            this.$message.success('Domain added successfully.');
                             // fetch new domain list 
                             fetch('api/public/domain', {
                                 credentials: 'include'
@@ -127,14 +123,12 @@
                             });
                         } else {
                             // show error msg
-                            this.$message({
-                                type: 'error',
-                                message: 'At least one of your domain already exists in the database, please check your input.',
-                                duration: 4000
-                            });
+                            this.$message.error('Something is wrong, please try again later.')
                         }
                     });
-                }).catch(() => {});
+                }).catch(() => {
+                    this.$message.error('Network error, please try again later.')
+                });
             },
             // change pass
             changePassShow: function () {
@@ -169,10 +163,7 @@
             errorInfo: function () {
                 return this.hasDanger ?
                     (this.checked.length === 0 ? ' Please choose a site.' :
-                        ' Domain format error.') : '';
-            },
-            validated: function () {
-                return !this.warnInfo && !this.errorInfo;
+                        ' Domain format is wrong.') : '';
             }
         },
         created: function () {

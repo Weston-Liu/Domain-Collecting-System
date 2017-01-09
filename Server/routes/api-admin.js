@@ -59,7 +59,6 @@ router.post('/domain', function (req, res) {
     }
     sql += `(${plain.join(',')})`;
 
-
     DB.connection.query(sql, params, (err, results, fields) => {
         if (err) {
             console.log(err);

@@ -138,7 +138,7 @@
         }
     };
 </script>
-<style>
+<style scoped>
     .operate-wrapper {
         display: inline-block
     }

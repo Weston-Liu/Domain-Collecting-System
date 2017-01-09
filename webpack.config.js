@@ -51,7 +51,7 @@ module.exports = {
   performance: {
     hints: false
   },
-  devtool: '#eval-source-map'
+  devtool: '#eval'
 }
 
 // dynamic configuration entries
