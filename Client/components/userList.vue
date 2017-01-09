@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="bold">Add User</div>
-        <small>The default password is 000000</small>
+        <small>The default password is 000000. The selection of country to admin will have no effect.</small>
         <el-form :inline="true" :rules="rules" ref="ruleForm" :model="form" class="addUser">
             <el-form-item prop="name">
                 <el-input v-model="form.name" placeholder="Name"></el-input>
@@ -77,7 +77,7 @@
                     country: [{
                         type: 'number',
                         required: true,
-                        message: 'Please select the country of the user',
+                        message: 'Please select the country',
                         trigger: 'blur'
                     }]
                 },

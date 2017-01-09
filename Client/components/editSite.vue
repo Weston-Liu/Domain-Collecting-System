@@ -6,7 +6,7 @@
                 <template slot="title">
                     <span>Country</span>
                     <span class="plus">
-                        <el-button size="mini" type="info" icon="plus" @click.stop="handleAddClick()"></el-button>
+                        <el-button size="mini" type="info" :disabled="adding" icon="plus" @click.stop="handleAddClick()"></el-button>
                     </span>
                 </template>
                 <el-table :data="country" :show-header="false">
@@ -22,7 +22,7 @@
                         <template scope="scope">
                             <div class="right">
                                 <!-- new item buttom -->
-                                <el-button v-if="scope.row.new" size="small" type="text" @click="$emit('ressite')">Cancel</el-button>
+                                <el-button v-if="scope.row.new" size="small" type="text" @click="handleCancel">Cancel</el-button>
                                 <el-button v-if="scope.row.new" size="small" type="info" @click="handleAdd(undefined)" icon="edit">Confirm</el-button>
                                 <!-- normal button -->
                                 <!-- Edit Popup -->
@@ -32,7 +32,7 @@
                                         <el-button size="mini" slot="append" @click="handleEdit(scope.row)">Proceed</el-button>
                                     </el-input>
                                     <div slot="reference" class="operate-wrapper">
-                                        <el-button size="small" @click="handleEditClick(scope.row)" icon="edit">Edit</el-button>
+                                        <el-button size="small" @click="handleEditClick(scope.row)" :disabled="adding" icon="edit">Edit</el-button>
                                     </div>
                                 </el-popover>
                                 <!-- Delete Popup -->
@@ -43,7 +43,7 @@
                                         <el-button type="danger" size="mini" @click="handleDelete(scope.row)">Proceed</el-button>
                                     </div>
                                     <div slot="reference" class="operate-wrapper">
-                                        <el-button size="small" type="danger" icon="delete">Delete</el-button>
+                                        <el-button size="small" type="danger" :disabled="adding" icon="delete">Delete</el-button>
                                     </div>
                                 </el-popover>
                             </div>
@@ -58,7 +58,7 @@
                 <template slot="title">
                     <span>{{ country.name }}</span>
                     <span class="plus">
-                        <el-button size="mini" type="info" icon="plus" @click.stop="handleAddClick(country.id)"></el-button>
+                        <el-button size="mini" type="info" :disabled="adding" icon="plus" @click.stop="handleAddClick(country.id)"></el-button>
                      </span>
                 </template>
                 <el-table :data="country.sites" :show-header="false">
@@ -74,7 +74,7 @@
                         <template scope="scope">
                             <div class="right">
                                 <!-- new item buttom -->
-                                <el-button v-if="scope.row.new" size="small" type="text" @click="$emit('ressite')">Cancel</el-button>
+                                <el-button v-if="scope.row.new" size="small" type="text" @click="handleCancel">Cancel</el-button>
                                 <el-button v-if="scope.row.new" size="small" type="info" @click="handleAdd(country.id)" icon="edit">Confirm</el-button>
                                 <!-- normal button -->
                                 <el-popover v-if="!scope.row.new" width="300" placement="top" v-model="editVisible['s' + scope.row.id]">
@@ -83,7 +83,7 @@
                                         <el-button size="mini" slot="append" @click="handleEdit(scope.row)">Proceed</el-button>
                                     </el-input>
                                     <div slot="reference" class="operate-wrapper">
-                                        <el-button size="small" @click="handleEditClick(scope.row)" icon="edit">Edit</el-button>
+                                        <el-button size="small" :disabled="adding" @click="handleEditClick(scope.row)" icon="edit">Edit</el-button>
                                     </div>
                                 </el-popover>
                                 <el-popover v-if="!scope.row.new" placement="top" v-model="deleteVisible['s' + scope.row.id]">
@@ -93,7 +93,7 @@
                                         <el-button type="danger" size="mini" @click="handleDelete(scope.row)">Proceed</el-button>
                                     </div>
                                     <div slot="reference" class="operate-wrapper">
-                                        <el-button size="small" type="danger" icon="delete">Delete</el-button>
+                                        <el-button size="small" type="danger" :disabled="adding" icon="delete">Delete</el-button>
                                     </div>
                                 </el-popover>
                             </div>
@@ -110,23 +110,35 @@
 
         data() {
             return {
-                expandedTabs: ['1', '2', '3', '4', 'country'],
                 editVisible: {},
                 deleteVisible: {},
-                input: ''
+                input: '',
+                adding: false
             };
+        },
+        computed: {
+            expandedTabs: function () {
+                var ret = ['country'];
+                for (let country of this.country) {
+                    ret.push(country.id + '');
+                }
+                return ret;
+            }
         },
         methods: {
             handleEditClick: function (row) {
                 this.input = row.name;
             },
             handleAddClick: function (cid) {
+
+                console.log(cid);
                 this.input = '';
+                this.adding = true;
                 // site
                 if (cid !== undefined) {
-                    for (let entry of this.country) {
-                        if (entry.id === cid) {
-                            entry.sites.push({
+                    for (let country of this.country) {
+                        if (country.id === cid) {
+                            country.sites.push({
                                 new: true
                             });
                         }
@@ -154,6 +166,7 @@
                     if (res.ok) {
                         this.$emit('refsite');
                         this.input = '';
+                        this.adding = false;
                         this.$message.success(`${isCountry? 'Country': 'Site'} added successfully.`);
                     } else {
                         this.$message.error(`The ${isCountry? 'country': 'site'} has already been added.`);
@@ -208,6 +221,10 @@
                 }).catch(() => {
                     this.$message.error('Network error, please try again later.')
                 });
+            },
+            handleCancel: function () {
+                this.$emit('ressite');
+                this.adding = false
             }
         }
     };
@@ -225,7 +242,8 @@
         position: absolute;
         right: 2em
     }
-    .countryList{
-        margin-bottom:1em
+    
+    .countryList {
+        margin-bottom: 1em
     }
 </style>
