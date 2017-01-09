@@ -131,7 +131,7 @@
             },
             handleAddClick: function (cid) {
 
-                console.log(cid);
+                
                 this.input = '';
                 this.adding = true;
                 // site
@@ -151,6 +151,12 @@
                 }
             },
             handleAdd: function (cid) {
+
+                ////   PROBLEM  HERE  //////
+                ////   NEW COUNTRY CANNOT GET CID ////
+
+
+                console.log(cid);
                 const isCountry = cid === undefined;
                 fetch(`api/admin/${isCountry? 'country': 'site'}`, {
                     credentials: 'include',
