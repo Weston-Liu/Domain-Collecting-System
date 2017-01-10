@@ -22,7 +22,7 @@
                         <template scope="scope">
                             <div class="right">
                                 <!-- new item buttom -->
-                                <el-button v-if="scope.row.new" size="small" type="text" @click="handleCancel">Cancel</el-button>
+                                <el-button v-if="scope.row.new" size="small" type="text" @click="handleCancel(undefined)">Cancel</el-button>
                                 <el-button v-if="scope.row.new" size="small" type="info" @click="handleAdd(undefined)" icon="edit">Confirm</el-button>
                                 <!-- normal button -->
                                 <!-- Edit Popup -->
@@ -77,9 +77,10 @@
                         <template scope="scope">
                             <div class="right">
                                 <!-- new item buttom -->
-                                <el-button v-if="scope.row.new" size="small" type="text" @click="handleCancel">Cancel</el-button>
+                                <el-button v-if="scope.row.new" size="small" type="text" @click="handleCancel(country.id)">Cancel</el-button>
                                 <el-button v-if="scope.row.new" size="small" type="info" @click="handleAdd(country.id)" icon="edit">Confirm</el-button>
                                 <!-- normal button -->
+                                <!--                           EDIT                                  -->
                                 <el-popover v-if="!scope.row.new" width="300" placement="top" v-model="editVisible['s' + scope.row.id]">
                                     <p>You are editing the name of site <b>{{ scope.row.name }}</b> </p>
                                     <el-input v-model="input">
@@ -89,6 +90,7 @@
                                         <el-button size="small" :disabled="adding" @click="handleEditClick(scope.row)" icon="edit">Edit</el-button>
                                     </div>
                                 </el-popover>
+                                <!--                           DELETE                                  -->
                                 <el-popover v-if="!scope.row.new" placement="top" v-model="deleteVisible['s' + scope.row.id]">
                                     <p>Do you surely want to <strong>DELETE</strong> site <b>{{ scope.row.name }}?</b> </p>
                                     <p><em>Any data relating to this site will be deleted accordingly,</em></p>
@@ -156,19 +158,10 @@
                 }
             },
             handleAdd: function (cid) {
-
+                if (this.input === '')
+                    return;
+                this.handleCancel(cid);
                 const isCountry = cid === undefined;
-
-                // DO NOT REMOVE THIS
-                if (isCountry) {
-                    this.country.pop();
-                } else {
-                    for (let country of this.country) {
-                        if (country.id === cid) {
-                            country.sites.pop();
-                        }
-                    }
-                }
 
                 fetch(`api/admin/${isCountry? 'country': 'site'}`, {
                     credentials: 'include',
@@ -194,6 +187,8 @@
                 });
             },
             handleEdit: function (row) {
+                if (this.input === '')
+                    return;
                 const isCountry = row.sites !== undefined;
                 fetch(`api/admin/${isCountry? 'country': 'site'}`, {
                     credentials: 'include',
@@ -240,9 +235,16 @@
                     this.$message.error('Network error, please try again later.')
                 });
             },
-            handleCancel: function () {
-                this.$emit('ressite');
-                this.adding = false
+            handleCancel: function (cid) {
+                const isCountry = cid === undefined;
+                this.adding = false;
+                if (isCountry) {
+                    this.country.pop();
+                } else {
+                    for (let country of this.country)
+                        if (country.id === cid)
+                            country.sites.pop();
+                }
             }
         }
     };

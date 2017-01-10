@@ -51,7 +51,7 @@
         </template>
       </el-tab-pane>
       <el-tab-pane label="Category">
-        <edit-site :country="sites" v-on:refsite="refreshSite" v-on:ressite="restoreSite"></edit-site>
+        <edit-site :country="sites" v-on:refsite="refreshSite"></edit-site>
       </el-tab-pane>
       <el-tab-pane label="User">
         <edit-user :user="users" :countries="sites" v-on:refuser="refreshUser"></edit-user>
@@ -185,7 +185,6 @@
         }).then(res => {
           return res.json().then(json => {
             this.sites = json;
-            localStorage.sites = JSON.stringify(json);
           });
         }).catch(() => {
           this.$message.error('Network error, please try again later.')
@@ -197,16 +196,11 @@
         }).then(res => {
           return res.json().then(json => {
             this.users = json;
-            localStorage.users = JSON.stringify(json);
           });
         }).catch(() => {
           this.$message.error('Network error, please try again later.')
         });
-      },
-      restoreSite: function () {
-        this.sites = JSON.parse(localStorage.sites);
       }
-
     },
     computed: {
 
@@ -235,7 +229,6 @@
       }).then(res => {
         return res.json().then(json => {
           this.sites = json;
-          localStorage.sites = JSON.stringify(json);
           /* Select All Countries */
           for (let entry of json) {
             this.countryChecked.push(entry.id);
@@ -288,7 +281,6 @@
       }).then(res => {
         return res.json().then(json => {
           this.users = json;
-          localStorage.users = JSON.stringify(json);
         });
       }).catch(() => {
         this.$message.error('Network error, please try again later.')
