@@ -13,7 +13,7 @@
                     <el-table-column>
                         <template scope="scope">
                             <!-- new item name input -->
-                            <el-input autofocus v-if="scope.row.new" v-model="input"></el-input>
+                            <el-input autofocus v-if="scope.row.new" size="small" v-model="input"></el-input>
                             <!-- normal name -->
                             <span v-if="scope.row.name!== undefined">{{ scope.row.name }}</span>
                         </template>
@@ -39,7 +39,9 @@
                                 <el-popover v-if="!scope.row.new" placement="top" v-model="deleteVisible['c' + scope.row.id]">
                                     <p>Do you surely want to <strong>DELETE</strong> country <b>{{ scope.row.name }}?</b> </p>
                                     <p><em>Any data relating to this country will be deleted accordingly,</em></p>
-                                    <p>including any related <u>users, sites, and domains.</u></p>
+                                    <p>including any related
+                                        <u>users, sites, and domains.</u>
+                                    </p>
                                     <div class="right">
                                         <el-button type="danger" size="mini" @click="handleDelete(scope.row)">Proceed</el-button>
                                     </div>
@@ -66,7 +68,7 @@
                     <el-table-column>
                         <template scope="scope">
                             <!-- new item name input -->
-                            <el-input autofocus v-if="scope.row.new" v-model="input"></el-input>
+                            <el-input autofocus v-if="scope.row.new" size="small" v-model="input"></el-input>
                             <!-- normal name -->
                             <span v-if="!scope.row.new">{{ scope.row.name }}</span>
                         </template>
@@ -90,7 +92,9 @@
                                 <el-popover v-if="!scope.row.new" placement="top" v-model="deleteVisible['s' + scope.row.id]">
                                     <p>Do you surely want to <strong>DELETE</strong> site <b>{{ scope.row.name }}?</b> </p>
                                     <p><em>Any data relating to this site will be deleted accordingly,</em></p>
-                                    <p>including any related <u>domains.</u></p>
+                                    <p>including any related
+                                        <u>domains.</u>
+                                    </p>
                                     <div class="right">
                                         <el-button type="danger" size="mini" @click="handleDelete(scope.row)">Proceed</el-button>
                                     </div>
@@ -133,7 +137,6 @@
             },
             handleAddClick: function (cid) {
 
-                
                 this.input = '';
                 this.adding = true;
                 // site
@@ -154,12 +157,19 @@
             },
             handleAdd: function (cid) {
 
-                ////   PROBLEM  HERE  //////
-                ////   NEW   COUNTRY   CANNOT   GET   CID ////
-
-
-                console.log(cid);
                 const isCountry = cid === undefined;
+
+                // DO NOT REMOVE THIS
+                if (isCountry) {
+                    this.country.pop();
+                } else {
+                    for (let country of this.country) {
+                        if (country.id === cid) {
+                            country.sites.pop();
+                        }
+                    }
+                }
+
                 fetch(`api/admin/${isCountry? 'country': 'site'}`, {
                     credentials: 'include',
                     method: 'PUT',
