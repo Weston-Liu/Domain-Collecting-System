@@ -74,7 +74,7 @@
         // pagination
         currentPage: 1,
         pageSize: 10,
-        pageSizes: [10, 50, 100, 1000],
+        pageSizes: [50, 100, 1000],
         // user list
         users: [],
         // domain list

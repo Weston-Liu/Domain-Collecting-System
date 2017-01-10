@@ -37,8 +37,9 @@
                                 </el-popover>
                                 <!-- Delete Popup -->
                                 <el-popover v-if="!scope.row.new" placement="top" v-model="deleteVisible['c' + scope.row.id]">
-                                    <p>Do you surely want to <strong>DELETE</strong> site <b>{{ scope.row.name }}?</b> </p>
-                                    <p><em>All the data relating to this site will be deleted accordingly.</em></p>
+                                    <p>Do you surely want to <strong>DELETE</strong> country <b>{{ scope.row.name }}?</b> </p>
+                                    <p><em>Any data relating to this country will be deleted accordingly,</em></p>
+                                    <p>including any related <u>users, sites, and domains.</u></p>
                                     <div class="right">
                                         <el-button type="danger" size="mini" @click="handleDelete(scope.row)">Proceed</el-button>
                                     </div>
@@ -67,7 +68,7 @@
                             <!-- new item name input -->
                             <el-input autofocus v-if="scope.row.new" v-model="input"></el-input>
                             <!-- normal name -->
-                            <span v-if="scope.row.name!== undefined">{{ scope.row.name }}</span>
+                            <span v-if="!scope.row.new">{{ scope.row.name }}</span>
                         </template>
                     </el-table-column>
                     <el-table-column>
@@ -88,7 +89,8 @@
                                 </el-popover>
                                 <el-popover v-if="!scope.row.new" placement="top" v-model="deleteVisible['s' + scope.row.id]">
                                     <p>Do you surely want to <strong>DELETE</strong> site <b>{{ scope.row.name }}?</b> </p>
-                                    <p><em>All the data relating to this site will be deleted accordingly.</em></p>
+                                    <p><em>Any data relating to this site will be deleted accordingly,</em></p>
+                                    <p>including any related <u>domains.</u></p>
                                     <div class="right">
                                         <el-button type="danger" size="mini" @click="handleDelete(scope.row)">Proceed</el-button>
                                     </div>
@@ -153,7 +155,7 @@
             handleAdd: function (cid) {
 
                 ////   PROBLEM  HERE  //////
-                ////   NEW COUNTRY CANNOT GET CID ////
+                ////   NEW   COUNTRY   CANNOT   GET   CID ////
 
 
                 console.log(cid);
