@@ -1,10 +1,13 @@
 <template>
     <div>
         <div class="bold">Add User</div>
-        <small>The default password is 000000. The selection of country to admin will have no effect.</small>
+        <small>The selection of country to admin user will have no effect.</small>
         <el-form :inline="true" :rules="rules" ref="ruleForm" :model="form" class="addUser">
             <el-form-item prop="name">
                 <el-input v-model="form.name" placeholder="Name"></el-input>
+            </el-form-item>
+            <el-form-item prop="password">
+                <el-input v-model="form.password" type="password" placeholder="Password"></el-input>
             </el-form-item>
             <el-form-item prop="role">
                 <el-select v-model="form.role" placeholder="Role">
@@ -27,7 +30,7 @@
             </el-table-column>
             <el-table-column label="Role">
                 <template scope="scope">
-                    <span>{{ scope.row.role === 9 ? 'Admin': 'User'}}</span>
+                    <span>{{ scope.row.role === 9 ? 'Admin': 'User' }}</span>
                 </template>
             </el-table-column>
             <el-table-column prop="country" label="Country"></el-table-column>
@@ -52,6 +55,7 @@
     </div>
 </template>
 <script>
+    
     export default {
         props: ['user', 'countries'],
 
@@ -59,6 +63,7 @@
             return {
                 form: {
                     name: null,
+                    password: null,
                     role: null,
                     country: null
                 },
@@ -66,6 +71,11 @@
                     name: [{
                         required: true,
                         message: 'Please input the user name',
+                        trigger: 'blur'
+                    }],
+                    password: [{
+                        required: true,
+                        message: 'Please input the password',
                         trigger: 'blur'
                     }],
                     role: [{
@@ -88,28 +98,30 @@
             handleAdd: function (name) {
                 this.$refs['ruleForm'].validate((valid) => {
                     if (valid) {
-                        fetch('api/admin/user', {
-                            credentials: 'include',
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                country: this.form.country,
-                                name: this.form.name,
-                                role: this.form.role
-                            })
-                        }).then(res => {
-                            if (res.ok) {
-                                this.$emit('refuser');
-                                this.$refs['ruleForm'].resetFields();
-                                this.$message.success('User added successfully.');
-                            } else {
-                                this.$message.error('The User has already been added.');
-                            }
-                        }).catch(() => {
-                            this.$message.error('Network error, please try again later.')
-                        });
+
+                            fetch('api/admin/user', {
+                                credentials: 'include',
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    country: this.form.country,
+                                    password: this.form.password,
+                                    name: this.form.name,
+                                    role: this.form.role
+                                })
+                            }).then(res => {
+                                if (res.ok) {
+                                    this.$emit('refuser');
+                                    this.$refs['ruleForm'].resetFields();
+                                    this.$message.success('User added successfully.');
+                                } else {
+                                    this.$message.error('The User has already been added.');
+                                }
+                            }).catch(() => {
+                                this.$message.error('Network error, please try again later.')
+                            });
                     }
                 })
             },

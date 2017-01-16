@@ -4,6 +4,7 @@ var path = require('path');
 var express = require('express');
 var xlsx = require('node-xlsx');
 var router = express.Router();
+const md5 = require('md5');
 var DB = new database();
 
 /**********************************************************************************************************/
@@ -102,24 +103,26 @@ router.post('/login', function (req, res) {
             user.name AS name, \
             user.password AS password, \
             user.role AS role, \
+            user.salt AS salt, \
             country.id AS cid, \
             country.name AS country \
             FROM `user` INNER JOIN `country` ON user.country = country.id \
-            WHERE user.name = ? AND user.password = ?';
+            WHERE user.name = ?';
 
-        var params = [req.body.u, req.body.p];
+        var params = [req.body.u];
 
         DB.connection.query(sql, params, (err, results, fields) => {
             if (err) {
                 reject(err);
                 res.sendStatus(500);
             }
-            if (results && results.length > 0) {
+            if (results && results.length > 0 && md5(req.body.p + results[0].salt) === results[0].password) {
                 req.session.uid = results[0].id;
                 req.session.name = results[0].name;
                 req.session.pass = results[0].password;
                 req.session.role = results[0].role;
                 req.session.cid = results[0].cid;
+                req.session.salt = results[0].salt;
                 req.session.country = results[0].country;
 
                 resolve(req.session.cid);
@@ -209,11 +212,12 @@ router.post('/xlsx', function (req, res) {
 
 router.post('/password', function (req, res) {
 
-    if (req.session.pass !== req.body.op) {
+    if (req.session.pass !== md5(req.body.op + req.session.salt)) {
         res.sendStatus(403);
     } else {
-        var sql = 'UPDATE `user` SET `password` = ? WHERE `id` = ?';
-        var params = [req.body.np, req.session.uid];
+        var sql = 'UPDATE `user` SET `password` = ?, `salt` = ? WHERE `id` = ?';
+        var salt = md5(new Date().getTime() + 'Riven');
+        var params = [md5(req.body.np + salt), salt, req.session.uid];
         DB.connection.query(sql, params, (err, results, fields) => {
             if (err) {
                 console.log(err);

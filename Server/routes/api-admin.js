@@ -1,8 +1,8 @@
 var database = require('../db.js');
 var express = require('express');
 var router = express.Router();
+const md5 = require('md5');
 var DB = new database();
-
 
 /*********************************************************************************************************/
 //                                          Domain QUERY
@@ -269,8 +269,10 @@ router.get('/user', function (req, res) {
  * @returns: 200 / 500
  */
 router.put('/user', function (req, res) {
-    var sql = "INSERT INTO `user` (`name`, `role`, `country`) VALUES (?, ?, ?)";
-    var params = [req.body.name, req.body.role, req.body.country];
+    var sql = "INSERT INTO `user` (`name`, `password`, `role`, `country`, `salt`) VALUES (?, ?, ?, ?, ?)";
+
+    var salt = md5(new Date().getTime() + 'Riven');
+    var params = [req.body.name, md5(req.body.password + salt), req.body.role, req.body.country, salt];
 
     DB.connection.query(sql, params, (err, results, fields) => {
         if (err) {

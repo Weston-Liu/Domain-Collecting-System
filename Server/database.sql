@@ -33,9 +33,10 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` INTEGER(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(40) NOT NULL,
-  `password` VARCHAR(255) NOT NULL DEFAULT '000000',
+  `password` VARCHAR(255) NOT NULL,
   `role` INTEGER(11) NOT NULL DEFAULT 1,
   `country` INTEGER(11) NOT NULL,
+  `salt` VARCHAR(255) NOT NULL,
   UNIQUE (`name`),
   PRIMARY KEY (`id`)
 );
@@ -117,8 +118,8 @@ INSERT INTO `site` VALUES ('17', 'sgstcepp_lenovo_unit','3');
 INSERT INTO `site` VALUES ('18', 'twepp_unit','4');
 INSERT INTO `site` VALUES ('19', 'twedu_unit','4');
 
-INSERT INTO `user` (`name`,`password`,`role`,`country`) VALUES ('admin','123','9','1');
-INSERT INTO `user` (`name`,`password`,`role`,`country`) VALUES ('user','321','1','1');
+INSERT INTO `user` (`name`,`password`,`role`,`country`,`salt`) VALUES ('admin','3f8c2eba9ac4240f49fa8ab1d5678c68','9','1','33a2213e77c555f1d8906c977a628f77');
+INSERT INTO `user` (`name`,`password`,`role`,`country`,`salt`) VALUES ('user','43e01cd787ba1ad810b86455281511fa','1','1','62a17b280b0e1fe9a8e1638bb4b15a12');
 
 INSERT INTO `data` VALUES ('1', '1', 'qq.com', '2', '2016-12-07 13:18:03', '2016-12-07 13:18:03');
 INSERT INTO `data` VALUES ('2', '2', '163.com', '1', '2016-12-12 13:18:18', '2016-12-19 13:18:23');
