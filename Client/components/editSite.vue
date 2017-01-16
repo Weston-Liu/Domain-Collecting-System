@@ -160,7 +160,9 @@
             handleAdd: function (cid) {
                 if (this.input === '')
                     return;
+                /** DO NOT TOUCH THIS **/
                 this.handleCancel(cid);
+                /** DO NOT TOUCH THIS **/
                 const isCountry = cid === undefined;
 
                 fetch(`api/admin/${isCountry? 'country': 'site'}`, {

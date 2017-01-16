@@ -42,7 +42,7 @@ router.get('/domain', function (req, res) {
 
     DB.connection.query(sql, (err, results, fields) => {
         if (err) {
-            console.log(err);
+            console.log(err.message);
             res.sendStatus(500);
         } else
             res.json(results);
@@ -75,7 +75,7 @@ router.post('/domain', function (req, res) {
 
     DB.connection.query(sql, params, (err, results, fields) => {
         if (err) {
-            console.log(err);
+            console.log(err.message);
             res.sendStatus(500);
         } else
             res.json(results);
@@ -96,23 +96,24 @@ router.put('/country', function (req, res) {
 
     DB.connection.query(sql, params, (err, results, fields) => {
         if (err) {
-            console.log(err);
+            console.log(err.message);
             res.sendStatus(500);
         } else
             res.sendStatus(200);
     });
 });
+
 /**
  * @param: country <int>, name <string>
  * @returns: 200 / 500
  */
 router.put('/site', function (req, res) {
-    var sql = "INSERT INTO `site` (`name`, `country`) VALUES (?,?)";
+    var sql = "INSERT INTO `site` (`name`, `country`) VALUES (?, ?)";
     var params = [req.body.name, req.body.country];
 
     DB.connection.query(sql, params, (err, results, fields) => {
         if (err) {
-            console.log(err);
+            console.log(err.message);
             res.sendStatus(500);
         } else
             res.sendStatus(200);
@@ -133,7 +134,7 @@ router.delete('/country', function (req, res) {
 
     DB.connection.query(sql, params, (err, results, fields) => {
         if (err) {
-            console.log(err);
+            console.log(err.message);
             res.sendStatus(500);
         } else
             res.sendStatus(200);
@@ -150,7 +151,7 @@ router.delete('/site', function (req, res) {
 
     DB.connection.query(sql, params, (err, results, fields) => {
         if (err) {
-            console.log(err);
+            console.log(err.message);
             res.sendStatus(500);
         } else
             res.sendStatus(200);
@@ -172,7 +173,7 @@ router.post('/country', function (req, res) {
 
     DB.connection.query(sql, params, (err, results, fields) => {
         if (err) {
-            console.log(err);
+            console.log(err.message);
             res.sendStatus(500);
         } else
             res.sendStatus(200);
@@ -189,7 +190,7 @@ router.post('/site', function (req, res) {
 
     DB.connection.query(sql, params, (err, results, fields) => {
         if (err) {
-            console.log(err);
+            console.log(err.message);
             res.sendStatus(500);
         } else
             res.sendStatus(200);
@@ -217,33 +218,35 @@ router.get('/site', function (req, res) {
         ORDER BY `cid`";
 
     DB.connection.query(sql, (err, results, fields) => {
-        err && console.log(err);
+        if (err) {
+            console.log(err.message);
+            res.sendStatus(500);
+        } else {
+            var ret = [];
+            var countryMap = new Map();
 
-        var ret = [];
-        var countryMap = new Map();
-
-        for (let entry of results) {
-            // if has country
-            if (countryMap.has(entry.cid)) {
-                ret[countryMap.get(entry.cid)].sites.push({
-                    id: entry.sid,
-                    name: entry.site
-                });
-            } else {
-                // create a new country
-                countryMap.set(entry.cid, ret.length);
-                ret.push({
-                    id: entry.cid,
-                    name: entry.country,
-                    sites: entry.sid ? [{
+            for (let entry of results) {
+                // if has country
+                if (countryMap.has(entry.cid)) {
+                    ret[countryMap.get(entry.cid)].sites.push({
                         id: entry.sid,
                         name: entry.site
-                    }] : []
-                });
-            }
-        };
-
-        res.json(ret);
+                    });
+                } else {
+                    // create a new country
+                    countryMap.set(entry.cid, ret.length);
+                    ret.push({
+                        id: entry.cid,
+                        name: entry.country,
+                        sites: entry.sid ? [{
+                            id: entry.sid,
+                            name: entry.site
+                        }] : []
+                    });
+                }
+            };
+            res.json(ret);
+        }
     });
 });
 
@@ -267,7 +270,7 @@ router.get('/user', function (req, res) {
 
     DB.connection.query(sql, (err, results, fields) => {
         if (err) {
-            console.log(err);
+            console.log(err.message);
             res.sendStatus(500);
         } else
             res.json(results);
@@ -290,7 +293,7 @@ router.put('/user', function (req, res) {
 
     DB.connection.query(sql, params, (err, results, fields) => {
         if (err) {
-            console.log(err);
+            console.log(err.message);
             res.sendStatus(500);
         } else
             res.sendStatus(200);
@@ -311,7 +314,7 @@ router.delete('/user', function (req, res) {
 
     DB.connection.query(sql, params, (err, results, fields) => {
         if (err) {
-            console.log(err);
+            console.log(err.message);
             res.sendStatus(500);
         } else {
             res.sendStatus(200);

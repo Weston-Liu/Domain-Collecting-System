@@ -55,7 +55,7 @@ router.put('/domain', function (req, res) {
 
     DB.connection.query(sql, params, (err, results, fields) => {
         if (err) {
-            console.log(err);
+            console.log(err.message);
             res.sendStatus(500);
         } else
             res.sendStatus(200);
@@ -82,8 +82,11 @@ router.get('/domain', function (req, res) {
         ORDER BY cTime";
 
     DB.connection.query(sql, [req.session.cid], (err, results, fields) => {
-        err && console.log(err);
-        res.json(results);
+        if (err) {
+            console.log(err.message);
+        } else {
+            res.json(results);
+        }
     });
 });
 
@@ -191,11 +194,9 @@ router.post('/xlsx', function (req, res) {
         data.push([entry.site, entry.domain, entry.applicant]);
     }
 
-    var buffer = xlsx.build([{
+    res.send(xlsx.build([{
         data: data
-    }]);
-
-    res.send(buffer);
+    }]));
 })
 
 
@@ -221,7 +222,7 @@ router.post('/password', function (req, res) {
         var params = [pass, salt, req.session.uid];
         DB.connection.query(sql, params, (err, results, fields) => {
             if (err) {
-                console.log(err);
+                console.log(err.message);
                 res.sendStatus(500);
             } else {
                 req.session.pass = pass;
@@ -231,6 +232,5 @@ router.post('/password', function (req, res) {
         });
     }
 });
-
 
 module.exports = router;

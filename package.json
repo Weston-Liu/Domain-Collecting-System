@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development supervisor -w server/routes Server/main.js",
     "build": "cross-env NODE_ENV=production webpack -p --progress --hide-modules",
-    "pro": "cross-env NODE_ENV=production node Server/main.js"
+    "pro": "cross-env NODE_ENV=production node Server/main.js",
+    "debug":"set DEBUG=express:* & supervisor -w server/routes Server/main.js"
   },
   "main": "server/main.js",
   "dependencies": {
