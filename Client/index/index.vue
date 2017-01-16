@@ -159,7 +159,7 @@
             },
             orderedDomain: function () {
                 var that = this;
-                return this.filteredDomain.sort(function (a, b) {
+                return this.filteredDomain.sort((a, b) => {
                     if (b[that.sortBy] > a[that.sortBy])
                         return that.orderBy === 'ascending' ? -1 : 1;
                     else
