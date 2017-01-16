@@ -3,7 +3,7 @@
         <div class="right">
             <span>Welcome, {{ name }}</span>
             <i class="el-icon-edit"></i>
-            <a @click="changePassShow" type="text" class="link">password</a>
+            <a @click="changePassToggle" type="text" class="link">password</a>
             <i class="el-icon-edit"></i>
             <a href="api/public/logout" class="link">Logout</a>
         </div>
@@ -30,7 +30,7 @@
                 </el-pagination>
         </template>
         <el-button @click="download" type="info">Download</el-button>
-        <change-pass :visible="changePassVisible" v-on:cpclosed="changePassClose"></change-pass>
+        <change-pass :visible="changePassVisible" v-on:cpclosed="changePassToggle"></change-pass>
     </div>
 </template>
 <script>
@@ -134,11 +134,8 @@
                 }).catch(() => {});
             },
             // change pass
-            changePassShow: function () {
-                this.changePassVisible = true;
-            },
-            changePassClose: function () {
-                this.changePassVisible = false;
+            changePassToggle: function () {
+                this.changePassVisible = !this.changePassVisible;
             },
             // custom event
             handleOrderChange: function ({
@@ -162,8 +159,7 @@
                 return this.filteredDomain.sort((a, b) => {
                     if (b[that.sortBy] > a[that.sortBy])
                         return that.orderBy === 'ascending' ? -1 : 1;
-                    else
-                        return that.orderBy === 'ascending' ? 1 : -1;
+                    return that.orderBy === 'ascending' ? 1 : -1;
                 })
             },
             paginatedDomain: function () {

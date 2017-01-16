@@ -3,7 +3,7 @@
     <div class="right">
       <span>Welcome, My lord</span>
       <i class="el-icon-edit"></i>
-      <a @click="changePassShow" type="text" class="link">password</a>
+      <a @click="changePassToggle" type="text" class="link">password</a>
       <i class="el-icon-edit"></i>
       <a href="api/public/logout" class="link">Logout</a>
     </div>
@@ -57,7 +57,7 @@
         <edit-user :user="users" :countries="sites" v-on:refuser="refreshUser"></edit-user>
       </el-tab-pane>
     </el-tabs>
-    <change-pass :visible="changePass_visible" v-on:cpclosed="changePassClose"></change-pass>
+    <change-pass :visible="changePassVisible" v-on:cpclosed="changePassToggle"></change-pass>
   </div>
 </template>
 <script>
@@ -87,7 +87,7 @@
         // date picker
         dateRange: [],
         // change pass dialog
-        changePass_visible: false,
+        changePassVisible: false,
         // date picker
         pickerOptions: {
           shortcuts: [{
@@ -172,13 +172,9 @@
         });
       },
       // change pass
-      changePassShow: function () {
-        this.changePass_visible = true
+      changePassToggle: function () {
+        this.changePassVisible = !this.changePassVisible;
       },
-      changePassClose: function () {
-        this.changePass_visible = false
-      },
-
       // custom envent handler
       refreshSite: function () {
         // fetch site data
@@ -225,8 +221,7 @@
         return this.filteredDomain.sort((a, b) => {
           if (b[that.sortBy] > a[that.sortBy])
             return that.orderBy === 'ascending' ? -1 : 1;
-          else
-            return that.orderBy === 'ascending' ? 1 : -1;
+          return that.orderBy === 'ascending' ? 1 : -1;
         })
       },
       paginatedDomain: function () {
