@@ -175,12 +175,12 @@
             },
             warnInfo: function () {
                 return this.checked.length > 1 ?
-                    ` You are adding domain to ${this.checked.length} sites. ` : '';
+                    ` You are adding data to ${this.checked.length} sites. ` : '';
             },
             errorInfo: function () {
                 return this.hasDanger ?
                     (this.checked.length === 0 ? ' Please choose a site.' :
-                        ' Domain format is wrong.') : '';
+                        ' Domain or Email format is wrong.') : '';
             }
         },
         created: function () {
