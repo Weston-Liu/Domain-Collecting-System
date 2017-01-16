@@ -23,7 +23,7 @@
         <small>You can use comma to seperate mutiple domains.</small>
         <div v-if="warnInfo" class="warn"><i class="el-icon-warning"></i>{{ warnInfo }}</div>
         <div v-if="errorInfo" class="error"><i class="el-icon-circle-cross"></i>{{ errorInfo }}</div>
-        <domain-list class="domainList" :domains="paginatedDomain"></domain-list>
+        <domain-list class="domainList" :domains="paginatedDomain" @change-order="handleOrderChange"></domain-list>
         <template>
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes"
                 :page-size="pageSize" layout="sizes, prev, pager, next" :total="filteredDomain.length">
@@ -52,6 +52,8 @@
                 domains: [],
                 checked: [],
                 input: '',
+                sortBy: 'site',
+                orderBy: 'ascending',
                 // change pass dialog
                 changePassVisible: false,
             }
@@ -137,6 +139,15 @@
             },
             changePassClose: function () {
                 this.changePassVisible = false;
+            },
+            // custom event
+            handleOrderChange: function ({
+                col,
+                prop,
+                order
+            }) {
+                this.sortBy = prop !== undefined ? prop : 'status';
+                this.orderBy = order;
             }
         },
         computed: {
@@ -146,8 +157,17 @@
                         return e;
                 });
             },
+            orderedDomain: function () {
+                var that = this;
+                return this.filteredDomain.sort(function (a, b) {
+                    if (b[that.sortBy] > a[that.sortBy])
+                        return that.orderBy === 'ascending' ? -1 : 1;
+                    else
+                        return that.orderBy === 'ascending' ? 1 : -1;
+                })
+            },
             paginatedDomain: function () {
-                return this.filteredDomain.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
+                return this.orderedDomain.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
             },
             hasWarning: function () {
                 return this.checked.length > 1;
