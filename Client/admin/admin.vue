@@ -32,18 +32,18 @@
             </div>
           </template>
         </div>
-        <domain-list :domains="paginatedDomain"></domain-list>
+        <domain-list :domains="paginatedDomain" @change-order="handleOrderChange"></domain-list>
         <template>
           <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes"
             :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="filteredDomain.length">
-          </el-pagination>
+            </el-pagination>
         </template>
         <template>
           <el-row type="flex" class="row-bg" justify="space-between">
             <el-col :span="12">
               <el-button @click="download" type="info">Download</el-button>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="12">
               <el-date-picker v-model="dateRange" type="daterange" align="right" placeholder="Choose Date Range" :picker-options="pickerOptions">
               </el-date-picker>
             </el-col>
@@ -73,7 +73,7 @@
       return {
         // pagination
         currentPage: 1,
-        pageSize: 10,
+        pageSize: 50,
         pageSizes: [50, 100, 1000],
         // user list
         users: [],
@@ -82,6 +82,8 @@
         countryChecked: [],
         siteChecked: [],
         sites: [],
+        sortBy: 'site',
+        orderBy: 'ascending',
         // date picker
         dateRange: [],
         // change pass dialog
@@ -156,7 +158,7 @@
         }).then(res => {
           if (res.ok) {
 
-             // update view
+            // update view
             var date = new Date();
             for (let domain of this.filteredDomain) {
               if (domain.vTime === domain.cTime) {
@@ -200,18 +202,35 @@
         }).catch(() => {
           this.$message.error('Network error, please try again later.')
         });
+      },
+      handleOrderChange: function ({
+        col,
+        prop,
+        order
+      }) {
+        this.sortBy = prop !== undefined ? prop : 'status';
+        this.orderBy = order;
       }
     },
     computed: {
 
       filteredDomain: function () {
         return this.domains.filter(e => {
-          var d = new Date(e.cTime);
+          const d = new Date(e.cTime);
           if (this.siteChecked.indexOf(e.sid) > -1 && d > this.dateRange[0] && d < this.dateRange[1]) return e;
         });
       },
+      orderedDomain: function () {
+        var that = this;
+        return this.filteredDomain.sort(function (a, b) {
+          if (b[that.sortBy] > a[that.sortBy])
+            return that.orderBy === 'ascending' ? 1 : -1;
+          else
+            return that.orderBy === 'ascending' ? -1 : 1;
+        })
+      },
       paginatedDomain: function () {
-        return this.filteredDomain.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
+        return this.orderedDomain.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
       }
     },
     created: function () {

@@ -42,7 +42,7 @@
             return {
                 // pagination
                 currentPage: 1,
-                pageSize: 10,
+                pageSize: 50,
                 pageSizes: [50, 100, 1000],
                 //basic info
                 name: '',
