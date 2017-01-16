@@ -44,8 +44,10 @@
               <el-button @click="download" type="info">Download</el-button>
             </el-col>
             <el-col :span="12">
-              <el-date-picker v-model="dateRange" type="daterange" align="right" placeholder="Choose Date Range" :picker-options="pickerOptions">
-              </el-date-picker>
+              <div class="box-right">
+                <el-date-picker v-model="dateRange" type="daterange" align="right" placeholder="Choose Date Range" :picker-options="pickerOptions">
+                </el-date-picker>
+              </div>
             </el-col>
           </el-row>
         </template>
@@ -329,10 +331,6 @@
     float: right;
     position: relative;
     top: -2.3em;
-  }
-  
-  .el-date-editor {
-    display: block !important
   }
   
   .el-pagination {

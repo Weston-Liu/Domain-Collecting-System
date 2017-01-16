@@ -5,8 +5,8 @@
     user-select: none;
 }
 
-input{
-     user-select: initial
+input {
+    user-select: initial
 }
 
 .container {
@@ -37,6 +37,11 @@ small {
     color: #888
 }
 
-.bold{
+.bold {
     font-weight: bold
+}
+
+.box-right {
+    width: 100%;
+    text-align: right;
 }
