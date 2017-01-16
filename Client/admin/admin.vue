@@ -224,9 +224,9 @@
         var that = this;
         return this.filteredDomain.sort(function (a, b) {
           if (b[that.sortBy] > a[that.sortBy])
-            return that.orderBy === 'ascending' ? 1 : -1;
-          else
             return that.orderBy === 'ascending' ? -1 : 1;
+          else
+            return that.orderBy === 'ascending' ? 1 : -1;
         })
       },
       paginatedDomain: function () {
@@ -287,7 +287,6 @@
             end.setMilliseconds(0)
 
             this.dateRange = [start, end];
-
           }
         });
       }).catch(() => {
