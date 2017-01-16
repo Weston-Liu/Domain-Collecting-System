@@ -213,17 +213,19 @@ router.post('/xlsx', function (req, res) {
 router.post('/password', function (req, res) {
 
     if (req.session.pass !== md5(req.body.op + req.session.salt)) {
-        res.sendStatus(403);
+        res.sendStatus(401);
     } else {
         var sql = 'UPDATE `user` SET `password` = ?, `salt` = ? WHERE `id` = ?';
         var salt = md5(new Date().getTime() + 'Riven');
-        var params = [md5(req.body.np + salt), salt, req.session.uid];
+        var pass = md5(req.body.np + salt);
+        var params = [pass, salt, req.session.uid];
         DB.connection.query(sql, params, (err, results, fields) => {
             if (err) {
                 console.log(err);
                 res.sendStatus(500);
             } else {
-                req.session.pass = req.body.np;
+                req.session.pass = pass;
+                req.session.salt = salt;
                 res.sendStatus(200);
             }
         });

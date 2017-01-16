@@ -6,7 +6,7 @@
         </el-table-column>
         <el-table-column prop="domain" label="Domain / Email" sortable>
         </el-table-column>
-        <el-table-column label="Status" sortable>
+        <el-table-column label="Status">
             <template scope="scope">
                 <el-tag class="status" close-transition v-if="scope.row.cTime === scope.row.vTime" type="grey">New Request</el-tag>
                 <el-tag class="status" close-transition v-if="scope.row.cTime !== scope.row.vTime" type="success">Viewed</el-tag>

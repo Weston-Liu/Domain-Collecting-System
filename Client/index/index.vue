@@ -27,7 +27,7 @@
         <template>
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes"
                 :page-size="pageSize" layout="sizes, prev, pager, next" :total="filteredDomain.length">
-            </el-pagination>
+                </el-pagination>
         </template>
         <el-button @click="download" type="info">Download</el-button>
         <change-pass :visible="changePassVisible" v-on:cpclosed="changePassClose"></change-pass>
@@ -107,6 +107,7 @@
                         }
                     }).then((res) => {
                         if (res.status === 200) {
+                            this.input = '';
                             // show success msg
                             this.$message.success('Domain added successfully.');
                             // fetch new domain list 
@@ -125,10 +126,10 @@
                             // show error msg
                             this.$message.error('Something is wrong, please try again later.')
                         }
+                    }).catch(() => {
+                        this.$message.error('Network error, please try again later.')
                     });
-                }).catch(() => {
-                    this.$message.error('Network error, please try again later.')
-                });
+                }).catch(() => {});
             },
             // change pass
             changePassShow: function () {
