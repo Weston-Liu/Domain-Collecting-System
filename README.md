@@ -8,7 +8,7 @@ The initial user is `admin` with password: `000000`
 
 1. Install [Node.js](https://nodejs.org/en/download/current/)
 
-2. `npm config set registry http://registry.npm.taobao.org`
+2. `npm config set registry https://registry.npm.taobao.org`
 
 3. `npm i domain-collecting-system`
 

@@ -18,41 +18,52 @@ var conf = {
 };
 
 console.log(colors.yellow.bold('**************************************************************************\n'));
-console.log(colors.yellow.bold('****************   Welcome to Domain Collecting System!   ****************\n'));
+console.log(colors.yellow.bold('|                  Welcome to Domain Collecting System!                  |\n'));
 console.log(colors.yellow.bold('**************************************************************************\n'));
 
 console.log(colors.cyan.bold("To begin the installation process, we just need some info about your database...\n"));
 
 rl.question(colors.magenta.bold("Please input your database host, press enter to use `localhost`...\n"), (answer) => {
     conf.host = answer === '' ? 'localhost' : answer;
+
     rl.question(colors.magenta.bold("Please input the database port, press enter to use `3306`...\n"), (answer) => {
         conf.port = answer === '' ? '3306' : answer;
+
         rl.question(colors.magenta.bold('Please input the database user, press enter to use `root`...\n'), (answer) => {
             conf.user = answer === '' ? 'root' : answer;
+
             rl.question(colors.magenta.bold('Please input the user password...\n'), (answer) => {
                 conf.password = answer;
+
                 rl.question(colors.magenta.bold('Please input the database name, press enter to use `dcs`...\n'), (answer) => {
                     conf.database = answer === '' ? 'dcs' : answer;
 
-                    var c = `\n` +
-                        `Host: ${conf.host}:${conf.port}\n` +
-                        `User: ${conf.user}\n` +
-                        `Password: ${conf.password}\n` +
-                        `Database: ${conf.database}\n`;
+                    var c = `\ 
+                         Host: ${conf.host}:${conf.port} \  
+                         User: ${conf.user} \ 
+                         Password: ${conf.password} \ 
+                         Database: ${conf.database} \n`;
 
                     console.log(colors.green.bold(c));
 
                     rl.question(colors.cyan.bold("Your database config is as above, continue? (y/n)\n"), (answer) => {
                         if (answer === 'y' || answer === 'Y')
                             install();
-                        else
+                        else {
                             console.log(colors.red.bold("Configuration terminated, please run `npm run install` again."));
+                            process.exit();
+                        }
                         rl.close();
                     })
+
                 });
+
             });
+
         });
+
     });
+
 });
 
 
@@ -63,31 +74,29 @@ function install() {
         .then(createDatabase, err => { console.error(colors.red.bold(err)); return Promise.reject() })
         .then(writeData, err => { console.error(colors.red.bold(err)); return Promise.reject() })
         .then(() => {
-            console.log(colors.cyan.bold('Done'));
             console.log(colors.cyan.bold('\nInstallation finished successfully!\n'));
             console.log(colors.yellow.bold('You can use `npm start` to launch the app.'));
             console.log(colors.yellow.bold('Now I will just do this for you.'));
             process.exit();
         }, () => {
-            console.log(colors.red.bold('Installation failed, please retry or instal manually.'));
+            console.log(colors.red.bold('Installation failed, please retry or install manually.'));
             process.exit();
         })
 }
 
 function writeConfig() {
     return new Promise((resolve, reject) => {
-        console.log(colors.cyan.bold('Writing Configuration File...'));
+        rl.write(colors.cyan.bold('Writing Configuration File...'));
         fs.writeFile(path.join(__dirname, 'server', 'config.js'), 'module.exports = ' + JSON.stringify(conf), function (err) {
             if (err) reject(err)
-            resolve();
+            else { resolve(); rl.write(colors.cyan.bold('Done\n')) }
         });
     })
 }
 
 function createDatabase() {
     return new Promise((resolve, reject) => {
-        console.log(colors.cyan.bold('Done'));
-        console.log(colors.cyan.bold('Creating Database...'));
+        rl.write(colors.cyan.bold('Creating Database...'));
 
         var connection = mysql.createConnection({
             host: conf.host,
@@ -101,7 +110,7 @@ function createDatabase() {
 
         connection.query(`CREATE DATABASE IF NOT EXISTS ${conf.database}`, function (err, results, fields) {
             if (err) reject(err);
-            resolve();
+            else { resolve(); rl.write(colors.cyan.bold('Done\n')) }
             connection.end();
         });
 
@@ -110,8 +119,7 @@ function createDatabase() {
 
 function writeData() {
     return new Promise((resolve, reject) => {
-        console.log(colors.cyan.bold('Done'));
-        console.log(colors.cyan.bold('Writing Data...'));
+        rl.write(colors.cyan.bold('Writing Data...'));
 
         var connection = mysql.createConnection({
             host: conf.host,
@@ -129,7 +137,7 @@ function writeData() {
 
         connection.query(sql, function (err, results, fields) {
             if (err) reject(err);
-            resolve();
+            else { resolve(); rl.write(colors.cyan.bold('Done\n')) }
         });
 
     })

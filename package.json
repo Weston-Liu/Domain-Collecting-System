@@ -1,14 +1,14 @@
 {
   "name": "domain-collecting-system",
   "description": "Domain collecting system powered by Node.js with MySQL",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "Vkki",
   "private": false,
   "scripts": {
     "dev": "cross-env NODE_ENV=development supervisor -w server/routes Server/main.js",
     "build": "cross-env NODE_ENV=production webpack -p --progress --hide-modules",
     "start": "cross-env NODE_ENV=production node Server/main.js",
-    "cn":"npm config set registry http://registry.npm.taobao.org",
+    "cn":"npm config set registry https://registry.npm.taobao.org",
     "install": "node install.js",
     "postinstall":"cross-env NODE_ENV=production node Server/main.js"
   },
