@@ -17,7 +17,9 @@ var conf = {
     database: ''
 };
 
+console.log(colors.yellow.bold('**************************************************\n'));
 console.log(colors.yellow.bold('****** Welcome to Domain Collecting System! ******\n'));
+console.log(colors.yellow.bold('**************************************************\n'));
  
 console.log(colors.cyan.bold("To begin the installation process, we just need some info about your database...\n"));
 
