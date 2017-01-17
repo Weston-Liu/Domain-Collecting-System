@@ -8,18 +8,18 @@
 
 3. `cd Domain-Collecting-System`
 
-3. `npm install` (If too slow, `npm config set registry http://registry.npm.taobao.org`)
+4. `npm install` (If too slow, run `npm config set registry http://registry.npm.taobao.org` first)
 
-4. Create a new database for this project
+5. Create a new database for this project
 
-5. Modify `Server/config.js` with correct database configration
+6. Import `Server/database.sql` to the created database
 
-6. Import `Server/database.sql` to the database
+7. Modify `Server/config.js` with correct database configration
 
-7. `npm run pro`, now the project will hopefully run on port 8888
+8. `npm run pro`, now the project will hopefully run on port 8888
 
-8. You can also configure a proxy for other server applications such as Nginx or Apache to use port 80 to access it, if the port 80 is occupied by another application.
+9. You can also configure a proxy for other server applications such as Nginx or Apache to use port 80 to access this project, if the port 80 is already occupied by another application.
     * Nginx
     * Apache
 
-9. Done! We're all set!
+10. Done! We're all set!
