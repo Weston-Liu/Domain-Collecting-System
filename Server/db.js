@@ -1,4 +1,5 @@
-var mysql = require('mysql');
+const mysql = require('mysql');
+const colors = require('colors');
 
 module.exports = class {
 
@@ -6,7 +7,7 @@ module.exports = class {
         this.connection = mysql.createConnection(require('./config.js'));
         this.connection.connect((err) => {
             if (err) 
-                console.error('error connecting: ' + err.message);
+                console.log(colors.red.bold('error connecting: ' + err.message));
         });
     }
     close() {
