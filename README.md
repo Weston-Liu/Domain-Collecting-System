@@ -10,13 +10,13 @@
 
 4. `npm install` (If too slow, run `npm config set registry http://registry.npm.taobao.org` first)
 
-5. `npm run install` for the following steps
+5. `npm run install` for the steps 6-8
 
-~~6. Create a new database for this project~~
+6. ~~Create a new database for this project~~
 
-~~7. Import `Server/database.sql` to the created database~~
+7. ~~Import `Server/database.sql` to the created database~~
 
-~~8. Modify `Server/config.js` with correct database configration~~
+8. ~~Modify `Server/config.js` with correct database configration~~
 
 9. `npm run pro`, now the project will hopefully run on port 8888
 
