@@ -1,5 +1,11 @@
 # Domain-Collecting-Tool for WPC of Lenovo
 
+This project is designed __ONLY__ for Lenovo (Beijing) Inc., WPC department. 
+
+Other organization or individual may found it useless.
+
+The initial user is admin with password: 000000
+
 ## Deploy to Production Environment
 
 1. Install [Node.js](https://nodejs.org/en/download/current/) and [Git](https://git-scm.com/downloads)
