@@ -7,11 +7,14 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development supervisor -w server/routes Server/main.js",
     "build": "cross-env NODE_ENV=production webpack -p --progress --hide-modules",
-    "pro": "cross-env NODE_ENV=production node Server/main.js"
+    "pro": "cross-env NODE_ENV=production node Server/main.js",
+    "cnpm": "npm config set registry http://registry.npm.taobao.org",
+    "install": "node install.js"
   },
   "main": "server/main.js",
   "dependencies": {
     "body-parser": "^1.15.2",
+    "colors": "^1.1.2",
     "compression": "^1.6.2",
     "ejs": "^2.5.5",
     "element-ui": "^1.1.3",

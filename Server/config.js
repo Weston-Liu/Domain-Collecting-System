@@ -1,6 +1,1 @@
-module.exports = {
-    host: 'localhost',
-    user: 'root',
-    password: '12345678',
-    database: 'sidcs'
-}
+module.exports = {"host":"localhost","user":"root","password":"12345678","database":"dcs"}
