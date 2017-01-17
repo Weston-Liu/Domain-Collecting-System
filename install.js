@@ -11,6 +11,7 @@ var rl = readline.createInterface({
 
 var conf = {
     host: '',
+    port:'',
     user: '',
     password: '',
     database: ''
@@ -22,28 +23,31 @@ console.log(colors.cyan.bold("To begin the installation process, we just need so
 
 rl.question(colors.magenta.bold("Please input your database host, press enter to use `localhost`...\n"), (answer) => {
     conf.host = answer === '' ? 'localhost' : answer;
-    rl.question(colors.magenta.bold('Please input the database user...\n'), (answer) => {
-        conf.user = answer;
-        rl.question(colors.magenta.bold('Please input the user password...\n'), (answer) => {
-            conf.password = answer;
-            rl.question(colors.magenta.bold('Please input the database name, press enter to use `dcs`...\n'), (answer) => {
-                conf.database = answer === '' ? 'dcs' : answer;
+    rl.question(colors.magenta.bold("Please input the database port, press enter to use `3306`...\n"), (answer) => {
+        conf.port = answer === '' ? '3306' : answer;
+            rl.question(colors.magenta.bold('Please input the database user, press enter to use `root`...\n'), (answer) => {
+                conf.port = answer === '' ? 'root' : answer;
+                rl.question(colors.magenta.bold('Please input the user password...\n'), (answer) => {
+                    conf.password = answer;
+                    rl.question(colors.magenta.bold('Please input the database name, press enter to use `dcs`...\n'), (answer) => {
+                        conf.database = answer === '' ? 'dcs' : answer;
 
-                var c = `\n`+
-                `Host: ${conf.host}\n`+
-                `User: ${conf.user}\n`+
-                `Password: ${conf.password}\n`+
-                `Database: ${conf.database}\n`;
-            
-                console.log(colors.green.bold(c));
+                        var c = `\n`+
+                        `Host: ${conf.host}:${conf.port}\n`+
+                        `User: ${conf.user}\n`+
+                        `Password: ${conf.password}\n`+
+                        `Database: ${conf.database}\n`;
+                    
+                        console.log(colors.green.bold(c));
 
-                rl.question(colors.cyan.bold("Your database config is as above, continue? (y/n)\n"), (answer) => {
-                    if(answer === 'y' || answer === 'Y')
-                        install();
-                    else
-                        console.log(colors.red.bold("Configuration terminated, please run `npm run install` again."));
-                    rl.close();
-                })
+                        rl.question(colors.cyan.bold("Your database config is as above, continue? (y/n)\n"), (answer) => {
+                            if(answer === 'y' || answer === 'Y')
+                                install();
+                            else
+                                console.log(colors.red.bold("Configuration terminated, please run `npm run install` again."));
+                            rl.close();
+                     })
+                });
             });
         });
     });
