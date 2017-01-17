@@ -78,7 +78,8 @@ if (process.env.NODE_ENV !== 'production') {
     });
 
 } else {
+    // production mode
     const server = app.listen(8888, function () {
-        console.log(`Now the app is listening at port ${server.address().port}`);
+        console.log(colors.yellow.bold(`Now the app is running at port ${server.address().port}`));
     });
 }

@@ -8,7 +8,7 @@
     "dev": "cross-env NODE_ENV=development supervisor -w server/routes Server/main.js",
     "build": "cross-env NODE_ENV=production webpack -p --progress --hide-modules",
     "start": "cross-env NODE_ENV=production node Server/main.js",
-    "preinstall":"npm config set registry http://registry.npm.taobao.org",
+    "cn":"npm config set registry http://registry.npm.taobao.org",
     "install": "node install.js",
     "postinstall":"cross-env NODE_ENV=production node Server/main.js"
   },
