@@ -26,7 +26,7 @@ rl.question(colors.magenta.bold("Please input your database host, press enter to
     rl.question(colors.magenta.bold("Please input the database port, press enter to use `3306`...\n"), (answer) => {
         conf.port = answer === '' ? '3306' : answer;
             rl.question(colors.magenta.bold('Please input the database user, press enter to use `root`...\n'), (answer) => {
-                conf.port = answer === '' ? 'root' : answer;
+                conf.user = answer === '' ? 'root' : answer;
                 rl.question(colors.magenta.bold('Please input the user password...\n'), (answer) => {
                     conf.password = answer;
                     rl.question(colors.magenta.bold('Please input the database name, press enter to use `dcs`...\n'), (answer) => {
