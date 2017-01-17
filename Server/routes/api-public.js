@@ -1,11 +1,11 @@
-var database = require('../db.js');
-var fs = require('fs');
-var path = require('path');
-var express = require('express');
-var xlsx = require('node-xlsx');
-var router = express.Router();
+const database = require('../db.js');
+const fs = require('fs');
+const path = require('path');
+const express = require('express');
+const xlsx = require('node-xlsx');
+const router = express.Router();
 const md5 = require('md5');
-var DB = new database();
+const DB = new database();
 
 /**********************************************************************************************************/
 //                                          Info

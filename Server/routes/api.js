@@ -1,6 +1,5 @@
-//var database = require('../db.js');
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
 router.use('/admin', require('./api-admin'));
 router.use('/public', require('./api-public'));

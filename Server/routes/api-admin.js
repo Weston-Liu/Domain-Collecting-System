@@ -1,22 +1,20 @@
-var database = require('../db.js');
-var express = require('express');
-var router = express.Router();
+const database = require('../db.js');
+const express = require('express');
+const router = express.Router();
 const md5 = require('md5');
-var DB = new database();
+const DB = new database();
 
 /*********************************************************************************************************/
 //                                          AUTH
 /*********************************************************************************************************/
 
-var auth = function (req, res, next) {
+router.all('*', function (req, res, next) {
     if (req.session.role !== 9) {
         res.sendStatus(401);
         return;
     }
     return next();
-}
-
-router.all('*', auth);
+});
 
 /*********************************************************************************************************/
 //                                          Domain QUERY
