@@ -55,13 +55,15 @@ rl.question(colors.magenta.bold("Please input your database host, press enter to
 
 
 function install(){
-    console.log(colors.cyan.bold('installing...'));
+    console.log(colors.cyan.bold('Installing...'));
 
     writeConfig()
     .then(createDatabase, err => {console.error(colors.red.bold(err)); return Promise.reject()})
     .then(writeData,  err => {console.error(colors.red.bold(err)); return Promise.reject()})
     .then(() => {
-        console.log(colors.cyan.bold('Installation finished successfully! Please run `npm run pro` to launch the app.'));
+        console.log(colors.cyan.bold('Installation finished successfully!'));
+        console.log(colors.cyan.bold('You can use `npm start` to launch the app.'));
+        console.log(colors.cyan.bold('Now I will just do this for you.'));
         process.exit();
     }, () => {
         console.log(colors.red.bold('Installation failed, please retry or instal manually.'));
