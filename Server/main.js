@@ -7,7 +7,8 @@ const session = require('express-session')
 const MySQLStore = require('express-mysql-session')(session);
 const bodyParser = require('body-parser');
 const minifyHTML = require('express-minify-html');
-const compression = require('compression')
+const compression = require('compression');
+const colors = require('colors');
 
 // dev-use-only
 if (process.env.NODE_ENV !== 'production') {
