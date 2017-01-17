@@ -63,6 +63,7 @@ function install(){
     .then(createDatabase, err => {console.error(colors.red.bold(err)); return Promise.reject()})
     .then(writeData,  err => {console.error(colors.red.bold(err)); return Promise.reject()})
     .then(() => {
+        console.log(colors.cyan.bold('Done'));
         console.log(colors.cyan.bold('\nInstallation finished successfully!\n'));
         console.log(colors.yellow.bold('You can use `npm start` to launch the app.'));
         console.log(colors.yellow.bold('Now I will just do this for you.'));
