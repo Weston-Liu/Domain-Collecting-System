@@ -8,9 +8,9 @@
 
 3. `cd Domain-Collecting-System`
 
-4. `npm install`
+4. `npm run cn` if the server is located in China
 
-5. `npm run pro`, now the project will run on port 8888
+5. `npm install`
 
 6. You can also configure a proxy for other server applications such as Nginx or Apache to use port 80 to access this project, if the port 80 is already occupied by another application.
     * Nginx
