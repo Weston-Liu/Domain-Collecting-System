@@ -8,7 +8,7 @@
 
 3. `cd Domain-Collecting-System`
 
-4. `npm install` (If too slow, run `npm config set registry http://registry.npm.taobao.org` first)
+4. `npm install` (If too slow, run `npm run cnpm` first)
 
 5. `npm run install` for the steps 6-8
 
