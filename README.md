@@ -4,7 +4,7 @@
 
 1. Install [Node.js](https://nodejs.org/en/download/current/) and [Git](https://git-scm.com/downloads)
 
-2. Clone this project `git clone git@github.com:Weston-Liu/Domain-Collecting-System.git`
+2. Clone this project `git clone --depth=1 git@github.com:Weston-Liu/Domain-Collecting-System.git`
 
 3. `cd Domain-Collecting-System`
 
