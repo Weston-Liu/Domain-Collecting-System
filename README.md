@@ -1,8 +1,8 @@
 # Domain-Collecting-Tool for WPC of Lenovo
 
-__This project is designed ONLY and STRICTLY for Lenovo (Beijing) Inc., WPC department.__
+__NOTE:__ This project is designed __ONLY__ and __STRICTLY__ for __Lenovo (Beijing) Inc., WPC department.__
 
-The initial user is admin with password: `000000`
+The initial user is `admin` with password: `000000`
 
 ## Deploy to Production Environment
 
