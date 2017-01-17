@@ -1,6 +1,6 @@
 # Domain-Collecting-Tool for WPC of Lenovo
 
-*** This project is designed ONLY and STRICTLY for Lenovo (Beijing) Inc., WPC department. ***
+__This project is designed ONLY and STRICTLY for Lenovo (Beijing) Inc., WPC department.__
 
 The initial user is admin with password: `000000`
 
