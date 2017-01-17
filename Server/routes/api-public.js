@@ -217,7 +217,7 @@ router.post('/password', function (req, res) {
         res.sendStatus(401);
     } else {
         var sql = 'UPDATE `user` SET `password` = ?, `salt` = ? WHERE `id` = ?';
-        var salt = md5(new Date().getTime() + 'Riven');
+        var salt = md5(new Date().getTime() + 'Vkki');
         var pass = md5(req.body.np + salt);
         var params = [pass, salt, req.session.uid];
         DB.connection.query(sql, params, (err, results, fields) => {

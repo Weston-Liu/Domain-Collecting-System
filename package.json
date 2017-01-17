@@ -1,8 +1,8 @@
 {
   "name": "domain-collecting-system",
   "description": "Domain collecting system powered by Node.js with MySQL",
-  "version": "1.0.0",
-  "author": "Riven",
+  "version": "1.0.1",
+  "author": "Vkki",
   "private": false,
   "scripts": {
     "dev": "cross-env NODE_ENV=development supervisor -w server/routes Server/main.js",

@@ -286,7 +286,7 @@ router.get('/user', function (req, res) {
 router.put('/user', function (req, res) {
     var sql = "INSERT INTO `user` (`name`, `password`, `role`, `country`, `salt`) VALUES (?, ?, ?, ?, ?)";
 
-    var salt = md5(new Date().getTime() + 'Riven');
+    var salt = md5(new Date().getTime() + 'Vkki');
     var params = [req.body.name, md5(req.body.password + salt), req.body.role, req.body.country, salt];
 
     DB.connection.query(sql, params, (err, results, fields) => {

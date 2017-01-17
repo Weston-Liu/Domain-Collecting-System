@@ -57,7 +57,7 @@ app.use(compression());
 // session
 app.use(session({
     name: 'passport',
-    secret: 'Riven',
+    secret: 'Vkki',
     resave: false,
     store: new MySQLStore(require('./config.js')),
     saveUninitialized: true
