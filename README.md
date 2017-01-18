@@ -12,7 +12,7 @@ The initial user is `admin` with password: `000000`
 
 3. `cd Domain-Collecting-System`
 
-4. `npm run deploy`
+4. `npm run d`
 
 5. The app should already be started at port 8888. You can also configure a proxy for other server applications such as Nginx or Apache to use port 80 to access this project, if the port 80 is already occupied by another application.
     * [Nginx](http://stackoverflow.com/questions/5009324/node-js-nginx-what-now/5015178#5015178)
