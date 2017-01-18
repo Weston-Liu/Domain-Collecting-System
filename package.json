@@ -10,7 +10,8 @@
     "start": "cross-env NODE_ENV=production node Server/main.js",
     "cn":"npm config set registry https://registry.npm.taobao.org",
     "install": "node install.js",
-    "postinstall":"cross-env NODE_ENV=production node Server/main.js"
+    "postinstall":"cross-env NODE_ENV=production node Server/main.js",
+    "deploy":"npm run cn && npm install"
   },
   "main": "server/main.js",
   "dependencies": {

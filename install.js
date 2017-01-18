@@ -113,7 +113,6 @@ function createDatabase() {
             else { resolve(); rl.write(colors.cyan.bold('Done\n')) }
             connection.end();
         });
-
     })
 }
 
