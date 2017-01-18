@@ -35,9 +35,7 @@ module.exports = {
     }]
   },
   plugins: [
-    new webpack.optimize.OccurrenceOrderPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
+    new webpack.optimize.OccurrenceOrderPlugin()
   ],
   resolve: {
     alias: {
@@ -75,9 +73,14 @@ if (process.env.NODE_ENV === 'production') {
     })
   ]);
 } else {
-
+  // dev
   var collect = Object.keys(module.exports.entry);
   for (let key of collect) {
     module.exports.entry[key].push('webpack-hot-middleware/client');
   }
+
+  module.exports.plugins = (module.exports.plugins || []).concat([
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoEmitOnErrorsPlugin()
+  ]);
 }
